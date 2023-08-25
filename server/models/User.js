@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const profileSchema = new Schema({
+const userSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -19,10 +19,21 @@ const profileSchema = new Schema({
         required: true,
         minLength: 8,
     },
+    projects: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'projects', 
+        },
+    ],
 
 });
 
-profileSchema.pre('save', async function (next) {
+userSchema.virtual('paletteCount').get(function () {
+    return this.palettes.length;
+});
+
+
+userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
       const saltRounds = 10;
       this.password = await bcrypt.hash(this.password, saltRounds);
@@ -31,11 +42,11 @@ profileSchema.pre('save', async function (next) {
     next();
   });
 
-  profileSchema.methods.isCorrectPassword = async function (password) {
+  userSchema.methods.isCorrectPassword = async function (password) {
     return bcrypt.compare(password, this.password);
   };
   
-  const Profile = model('Profile', profileSchema);
+  const User = model('User', userSchema);
   
-  module.exports = Profile;
+  module.exports = User;
   
