@@ -23,5 +23,15 @@ const colorSchema = new Schema(
           id: true,  
     }
 );
+
+colorSchema.statis.countReferences = async function(hexCode) {
+    try {
+        const count = await this.model('Palettes', 'Gradients').countDocuments({ hexCode});
+        return `This color appears in ${count} of your designs`;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const Colors = model('colors', colorSchema);
-module.exports = Colorss;
+module.exports = Colors;
