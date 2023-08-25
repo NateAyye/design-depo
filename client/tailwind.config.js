@@ -60,6 +60,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        segoe: ["Segoe UI", ...fontFamily.sans],
+        archivo: ["Archivo", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {
