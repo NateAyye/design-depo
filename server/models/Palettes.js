@@ -47,9 +47,13 @@ const paletteSchema = new Schema(
             virtuals: true,
             getters: true,
           },
-          id: false,  
+          id: true,  
     }
 );
+paletteSchema.virtual('colors').get(function() {
+    return [this.color1, this.color2, this.color3, this.color4, this.color5];
+});
+
 
 const Palettes = model('palettes', paletteSchema);
 module.exports = Palettes;
