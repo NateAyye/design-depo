@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Toaster } from './components/ui/toaster';
 import Home from './pages/Home';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+      <Toaster />
     </>
   );
 }
