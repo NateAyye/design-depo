@@ -10,7 +10,9 @@
     "seed": "cd server && npm run seed",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm run build",
+    "tailwind:dev": "cd client && npm run tailwind:dev",
+    "tailwind:prod": "cd client && npm run tailwind:prod"
   },
   "keywords": [],
   "author": "",
