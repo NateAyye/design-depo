@@ -19,43 +19,19 @@ const userSchema = new Schema({
         required: true,
         minLength: 8,
     },
-    palettes: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'palettes',
-        },
-    ],
-
-    gradients: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'gradients',
-        },
-    ],
-    colors: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'colors',
-        }
-    ],
-    fonts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'colors', 
-        }
-    ],
     projects: [
         {
             type: Schema.Types.ObjectId,
             ref: 'projects', 
-        }
-    ]
+        },
+    ],
 
 });
 
 userSchema.virtual('paletteCount').get(function () {
     return this.palettes.length;
 });
+
 
 userSchema.pre('save', async function (next) {
     if (this.isNew || this.isModified('password')) {
