@@ -31,4 +31,4 @@ const gradientSchema = new Schema(
 );
 
 const Gradients = model('gradients', gradientSchema);
-module.exports = gradientSchema;
+module.exports = Gradients;
