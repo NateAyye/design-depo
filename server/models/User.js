@@ -47,10 +47,14 @@ const userSchema = new Schema({
     projects: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'colors', 
+            ref: 'projects', 
         }
     ]
 
+});
+
+userSchema.virtual('paletteCount').get(function () {
+    return this.palettes.length;
 });
 
 userSchema.pre('save', async function (next) {
