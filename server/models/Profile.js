@@ -19,6 +19,11 @@ const profileSchema = new Schema({
         required: true,
         minLength: 8,
     },
+    palettes: [Palettes],
+    gradients: [Gradients],
+    colors: [Colors],
+    fonts: [Fonts],
+    projects: [Projects]
 
 });
 
