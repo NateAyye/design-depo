@@ -21,7 +21,7 @@ const formSchema = z.object({
 function AddColorDialog({ onSubmit, triggerElement, hex, rgb, name, setName, setHex, setRgb, setModalOpen }) {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [appState, appDispatch] = useAppContext()
+  const [, appDispatch] = useAppContext()
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const { toast } = useToast();
   const form = useForm({
@@ -71,7 +71,6 @@ function AddColorDialog({ onSubmit, triggerElement, hex, rgb, name, setName, set
 
   return (
     <Dialog open={open} onOpenChange={(open) => {
-      console.log('open', open);
       appDispatch({ type: SET_MODAL_OPEN, payload: open })
       setOpen(open)
     }}>
