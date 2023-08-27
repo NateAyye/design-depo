@@ -1,3 +1,5 @@
+import tinycolor from "tinycolor2";
+
 function generateRandomColor() {
   var letters = "0123456789ABCDEF";
   var color = "";
@@ -44,21 +46,21 @@ function hexToRgb(hex) {
   return { r: parseInt(rgbValues[0], 16), g: parseInt(rgbValues[1], 16), b: parseInt(rgbValues[2], 16), a: 1 };
 }
 
-const getColorName = async (color) => {
-    try {
-      const res = await fetch(`https://www.thecolorapi.com/id?hex=${ color?.replace('#', '') }`)
-      const data = await res.json();
-      return data.name.value;
-    } catch (error) {
-      console.log(error);
-      return ''
-    }
-  }
+const formatColor = (color, format) => {
+  var color1 = tinycolor(color);
+  return color1.toString(format) // "hsv(0, 100%, 100%)"
+}
 
-export {
-  generateRandomColor,
-  getTextColor,
-  getColorName,
-  hexToRgb
-};
+const getColorName = async (color) => {
+  try {
+    const res = await fetch(`https://www.thecolorapi.com/id?hex=${ color?.replace('#', '') }`)
+    const data = await res.json();
+    return data.name.value;
+  } catch (error) {
+    console.log(error);
+    return null
+  }
+}
+
+export { formatColor, generateRandomColor, getColorName, getTextColor, hexToRgb };
 

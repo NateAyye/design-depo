@@ -43,30 +43,32 @@ function App() {
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className='flex-1 flex'>
-              <ColorPickerProvider>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={<Home />}
-                  />
-                  <Route
-                    path="/auth"
-                    element={<Auth />}
-                  />
-                  <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                  />
-                  <Route
-                    path="/color-picker"
-                    element={<ColorPicker />}
-                  />
-                  <Route
-                    path="/palette-generator"
-                    element={<PaletteGenerator />}
-                  />
-                </Routes>
-              </ColorPickerProvider>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<Home />}
+                />
+                <Route
+                  path="/auth"
+                  element={<Auth />}
+                />
+                <Route
+                  path="/dashboard"
+                  element={<Dashboard />}
+                />
+                <Route
+                  path="/color-picker"
+                  element={
+                    <ColorPickerProvider>
+                      <ColorPicker />
+                    </ColorPickerProvider>
+                  }
+                />
+                <Route
+                  path="/palette-generator"
+                  element={<PaletteGenerator />}
+                />
+              </Routes>
             </main>
           </div>
         </Router>
