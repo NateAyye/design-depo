@@ -1,8 +1,8 @@
 // Inspired by react-hot-toast library
 import * as React from "react"
 
-const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 3
+const TOAST_LIMIT = 8
+const TOAST_REMOVE_DELAY = 5
 
 
 let count = 0
@@ -64,9 +64,9 @@ export const reducer = (state, action) => {
         toasts: state.toasts.map((t) =>
           t.id === toastId || toastId === undefined
             ? {
-                ...t,
-                open: false,
-              }
+              ...t,
+              open: false,
+            }
             : t
         ),
       }
@@ -148,4 +148,5 @@ function useToast() {
   }
 }
 
-export { useToast, toast }
+export { toast, useToast }
+
