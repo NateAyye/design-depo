@@ -53,6 +53,7 @@ DropdownMenuSubContent.displayName =
 const DropdownMenuContent = React.forwardRef(({ className, sideOffset = 4, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
+      align="end"
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
