@@ -1,4 +1,5 @@
 import { ArchiveIcon, ColorWheelIcon, FontFamilyIcon, OpacityIcon, ShadowIcon } from "@radix-ui/react-icons";
+import tinycolor from "tinycolor2";
 
 export const COLOR_FORMATS = [
   'hex',
@@ -6,6 +7,53 @@ export const COLOR_FORMATS = [
   'hsl',
   'hsv',
 ]
+
+
+export const COLOR_HARMONIES = [
+  {
+    label: 'analogous',
+    buildColors: (color) => {
+      const newColor = tinycolor(color);
+      return [...newColor.analogous(3, 4)]
+    }
+  },
+  {
+    label: 'complement',
+    buildColors: (color) => {
+      const newColor = tinycolor(color);
+      return [newColor, newColor.complement(2, 4)]
+    }
+  },
+  {
+    label: 'monochromatic',
+    buildColors: (color) => {
+      const newColor = tinycolor(color);
+      return [...newColor.monochromatic(3, 4)]
+    }
+  },
+  {
+    label: 'split Complement',
+    buildColors: (color) => {
+      const newColor = tinycolor(color);
+      return [...newColor.splitcomplement(3, 4)]
+    }
+  },
+  {
+    label: 'Triadic',
+    buildColors: (color) => {
+      const newColor = tinycolor(color);
+      return [...newColor.triad(3, 4)]
+    }
+  },
+  {
+    label: 'Tetriadic',
+    buildColors: (color) => {
+      const newColor = tinycolor(color);
+      return [...newColor.tetrad(4, 8)]
+    }
+  },
+]
+
 
 
 export const DASHBOARD_TABS = [
