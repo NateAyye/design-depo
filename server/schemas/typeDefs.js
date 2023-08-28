@@ -8,22 +8,33 @@ type User {
     password: String
   }
 
-  type Auth {
+type Color {
+    _id: ID!
+    createdAt: String!
+    hexCode: String!
+    references: String
+  }
+
+type Auth {
     token: ID!
     User: User
   }
 
-  type Query {
+type Query {
     Users: [User]!
     User(UserId: ID!): User
+    Colors: [Color]!
+    Color(id: ID!): Color
   }
 
-  type Mutation {
+type Mutation {
     createUser(name: String!, email: String!, password: String!): Auth
     deleteUser(UserId: ID!): User
     updateUserName(id: ID!, newName: String!): User
     login(email: String!, password: String!): Auth
-    
+    createColor(hexCode: String!): Color
+    deleteColor(id: ID!): Color
+    updateColor(id: ID!, hexCode: String!): Color
   }
 `;
 
