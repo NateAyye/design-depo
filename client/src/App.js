@@ -15,6 +15,7 @@ import ColorPicker from './pages/ColorPicker';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import PaletteGenerator from './pages/PaletteGenerator';
+import Footer from './components/footer';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -70,6 +71,7 @@ function App() {
                 />
               </Routes>
             </main>
+            <Footer />
           </div>
         </Router>
         <Toaster />
