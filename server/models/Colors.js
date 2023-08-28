@@ -24,14 +24,19 @@ const colorSchema = new Schema(
     }
 );
 
-colorSchema.statis.countReferences = async function(hexCode) {
+colorSchema.statics.countReferences = async function(hexCode) {
     try {
-        const count = await this.model('Palettes', 'Gradients').countDocuments({ hexCode});
-        return `This color appears in ${count} of your designs`;
+        const palettesCount = await this.model('Palettes').countDocuments({ hexCode });
+        const gradientsCount = await this.model('Gradients').countDocuments({ hexCode });
+        
+        const totalCount = palettesCount + gradientsCount;
+        
+        return `This color appears in ${totalCount} of your designs`;
     } catch (error) {
         throw error;
     }
 };
+
 
 const Colors = model('colors', colorSchema);
 module.exports = Colors;
