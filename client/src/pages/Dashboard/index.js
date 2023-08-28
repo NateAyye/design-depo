@@ -5,7 +5,9 @@ import { useAppContext } from "../../context/AppState";
 import { SET_TAB } from "../../context/AppState/actions";
 import { properCase } from "../../lib/utils";
 import ColorsTab from "./Tabs/ColorsTab";
+import FontsTab from "./Tabs/FontsTab";
 import PalettesTab from "./Tabs/PalettesTab";
+import GradientsTab from "./Tabs/GradientsTab";
 
 function Dashboard() {
   const [appState, appDispatch] = useAppContext();
@@ -43,15 +45,11 @@ function Dashboard() {
           </TabsContent>
 
           <TabsContent className='flex-1' value="gradients">
-            <div>
-              Gradients Tab
-            </div>
+            <GradientsTab />
           </TabsContent>
 
           <TabsContent className='flex-1' value="fonts">
-            <div>
-              Fonts Tab
-            </div>
+            <FontsTab />
           </TabsContent>
 
           <TabsContent className='flex-1' value="projects">

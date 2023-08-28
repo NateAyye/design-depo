@@ -164,6 +164,11 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
                 <div key={color} style={{ backgroundColor: color }} onClick={() => {
                   setRgbValue(hexToRgb(color))
                   setActiveColor(color)
+                }} onKeyDownCapture={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setRgbValue(hexToRgb(color))
+                    setActiveColor(color)
+                  }
                 }} role="button" tabIndex={0} className="group/palette flex justify-center items-center flex-1 hover:flex-[2]" onKeyDown={(e) => { }} >
                   <span style={{ color: activeColor === color ? 'black' : 'white' }} className={`font-bold font-segoe ${ activeColor === color ? '' : 'sr-only' } group-hover/palette:not-sr-only`} >
                     <DotFilledIcon className={`w-6 h-6 ${ activeColor === color ? '' : '' }`} />
