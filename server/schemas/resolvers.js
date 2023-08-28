@@ -1,12 +1,20 @@
 const  User  = require('../models/User');
+const Color = require('../models/Colors')
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
+    // User Queries
     Users: async () => await User.find(), // get all Users
-    User: async (_, { id }) => await User.findById(id), // get User by is
+    User: async (_, { id }) => await User.findById(id), // get User by id
+
+    // Color Queries
+    Colors: async () => await Color.find(), // get all Colors
+    Color: async (_, { id }) => await Color.findById(id), // get Color by id
   },
   Mutation: {
+    // User Mutations 
+
     createUser: async (_, { name, email, password }) => {
         const User = await User.create({ name, email, password });
         const token = signToken(User);
@@ -35,7 +43,52 @@ const resolvers = {
         const token = signToken(User);
         return { token, User };
       },
-  },
+    
+      // Colors Mutations
+      createColor: async (_, { hexCode }) => {
+        const newColor = new Color({
+          hexCode,
+        });
+        await newColor.save();
+        return newColor;
+      },
+      deleteColor: async (_, { id }) => {
+        try {
+          const deletedColor = await Color.findByIdAndDelete(id);
+          if (!deletedColor) {
+            throw new Error('Color not found');
+          }
+          return deletedColor;
+        } catch (error) {
+          throw error;
+        }
+      },
+      updateColor: async (_, { id, hexCode }) => {
+        try {
+          const updatedColor = await Color.findByIdAndUpdate(
+            id,
+            { hexCode },
+            { new: true }
+          );
+          if (!updatedColor) {
+            throw new Error('Color not found');
+          }
+          return updatedColor;
+        } catch (error) {
+          throw error;
+        }
+      },  
+      Color: {
+        references: async (parent) => {
+          try {
+            const countMessage = await Color.countReferences(parent.hexCode);
+            return countMessage;
+          } catch (error) {
+            throw error;
+          }
+        },
+      },
+    },
 };
 
 module.exports = resolvers;
