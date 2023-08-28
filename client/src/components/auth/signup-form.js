@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './ui/form';
-import { Input } from './ui/input';
+} from '../ui/form';
+import { Input } from '../ui/input';
 
 
 const formSchema = z.object({
