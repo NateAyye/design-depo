@@ -10,7 +10,7 @@ function TabTitle({ title, onFormSubmit }) {
           if (onFormSubmit) onFormSubmit(e)
           // TODO: Add search functionality
         }} className="flex justify-center items-center gap-2">
-          <input type="text" placeholder="Search" name="search" className="bg-transparent border border-foreground/20 rounded-md px-3 py-1.5 text-foreground/80 focus:outline-none focus:ring-1 focus:ring-foreground/50 focus:border-foreground/50" />
+          <input type="search" placeholder="Search" name="search" className="bg-transparent border border-foreground/20 rounded-md px-3 py-1.5 text-foreground/80 focus:outline-none focus:ring-1 focus:ring-foreground/50 focus:border-foreground/50" />
           <Button type='submit'>Submit</Button>
         </form>
       </div>
