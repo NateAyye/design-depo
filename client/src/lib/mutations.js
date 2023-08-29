@@ -18,23 +18,22 @@ mutation createUser($name: String!, $email: String!, $password: String!) {
   }
 `;
 export const LOGIN_USER = gql`
-    mutation login($email: String!, $password: String!) {
-        login(email: $email, password: $password) {
-            token
-            user {
-                _id
-                name
-            }
-        }
+mutation loginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password) {
+      token
+      User {
+        
+      }
     }
+  }
 `;
 
 export const DELETE_USER = gql`
-    mutation deleteUser($userId: String!) {
-        deleteUser(userId: $userID) {
-            _id
-            name
-            projects
+    mutation DeleteUser($userId: ID!) {
+        deleteUser(UserId: $userId) {
+        _id
+        email
+        name
         }
     }
 `;
