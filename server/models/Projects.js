@@ -11,7 +11,7 @@ const projectSchema = new Schema({
     projectName: {
         type: String,
         required: true,
-        trime: true,
+        trim: true,
     },
     palettes: [
         {
