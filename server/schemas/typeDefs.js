@@ -21,6 +21,10 @@ type Gradient {
     color: String!
     createdAt: String!
   }
+type Font {
+    _id: ID!
+    activeFontFamily: String!
+  }
 
 type Auth {
     token: ID!
@@ -34,6 +38,8 @@ type Query {
     Color(id: ID!): Color
     Gradients: [Gradient]!
     Gradient(id: ID!): Gradient
+    Fonts: [Font]!
+    Font(id: ID!): Font
   }
 
 type Mutation {
@@ -41,12 +47,18 @@ type Mutation {
     deleteUser(UserId: ID!): User
     updateUserName(id: ID!, newName: String!): User
     login(email: String!, password: String!): Auth
+
     createColor(hexCode: String!): Color
     deleteColor(id: ID!): Color
     updateColor(id: ID!, hexCode: String!): Color
+
     createGradient(gradientName: String!, color: String!): Gradient!
     updateGradient(id: ID!, gradientName: String!, color: String!): Gradient!
     deleteGradient(id: ID!): Gradient!
+    
+    createFont(activeFontFamily: String!): Font
+    deleteFont(id: ID!): Font
+    updateFont(id: ID!, activeFontFamily: String!): Font
   }
 `;
 

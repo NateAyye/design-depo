@@ -1,6 +1,7 @@
 const  User  = require('../models/User');
 const Color = require('../models/Colors');
 const Gradients = require('../models/Gradients');
+const Fonts = require('../models/Fonts');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -16,6 +17,10 @@ const resolvers = {
     // Gradients Queries
     Gradients: async () => await Gradients.find(), // Get all gradients
     Gradient: async (_, { id }) => await Gradients.findById(id), // Get gradient by ID
+
+    // Font Queries
+    Fonts: async () => await Fonts.find(), // Get all Fonts
+    Font: async (_, { id }) => await Fonts.findById(id), // Get Font by ID
   },
   Mutation: {
     // User Mutations 
@@ -81,6 +86,8 @@ const resolvers = {
           throw error;
         }
       },
+
+    // Grafient mutations
     createGradient: async (_, { gradientName, color }) => {
         const newGradient = await Gradients.create({gradientName,color,});
         //await newGradient.save();
@@ -111,7 +118,41 @@ const resolvers = {
         } catch (error) {
           throw error;
         }
-      },        
+      },
+    createFont: async (_, { activeFontFamily }) => {
+        const newFont = await Fonts.create({
+          activeFontFamily,
+        });
+        //await newFont.save();
+        return newFont;
+      },
+    deleteFont: async (_, { id }) => {
+        try {
+          const deletedFont = await Fonts.findByIdAndDelete(id);
+          if (!deletedFont) {
+            throw new Error('Font not found');
+          }
+          return deletedFont;
+        } catch (error) {
+          throw error;
+        }
+      },  
+    updateFont: async (_, { id, activeFontFamily }) => {
+        try {
+          const updatedFont = await Fonts.findByIdAndUpdate(
+            id,
+            { activeFontFamily },
+            { new: true }
+          );
+          if (!updatedFont) {
+            throw new Error('Font not found');
+          }
+          return updatedFont;
+        } catch (error) {
+          throw error;
+        }
+      },
+
     },
     Color: {
       references: async (parent) => {
