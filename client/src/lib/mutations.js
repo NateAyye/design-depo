@@ -88,3 +88,14 @@ mutation DeleteGradient($deleteGradientId: ID!) {
     }
   }
 `;
+
+export const UPDATE_GRADIENT = gql`
+    mutation UpdateGradient($updateGradientId: ID!, $gradientName: String!, $color: String!) {
+        updateGradient(id: $updateGradientId, gradientName: $gradientName, color: $color) {
+        _id
+        color
+        createdAt
+        gradientName
+        }
+    }
+`;
