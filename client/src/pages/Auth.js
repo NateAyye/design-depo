@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import LoginForm from "../components/auth/login-form"
 import SignUpForm from "../components/auth/signup-form"
@@ -7,11 +8,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs"
+import AuthService from '../lib/auth'
 
 function Auth() {
   const navigate = useNavigate()
-  
-  if (localStorage.getItem('id_token')) navigate('/', { replace: true })
+
+  if (AuthService.loggedIn()) {
+    navigate('/', { replace: true })
+  }
+  useEffect(() => {
+  })
+
   return (
     <div className="container min-h-[90vh] flex justify-center items-center">
       <Tabs defaultValue="login" className="w-[400px]">
