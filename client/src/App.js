@@ -6,6 +6,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Footer from './components/footer';
 import Navbar from './components/navbar';
 import { Toaster } from './components/ui/toaster';
 import { AppProvider } from './context/AppState';
@@ -15,7 +16,6 @@ import ColorPicker from './pages/ColorPicker';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import PaletteGenerator from './pages/PaletteGenerator';
-import Footer from './components/footer';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -37,6 +37,7 @@ const client = new ApolloClient({
 });
 
 function App() {
+  console.log(process.env.GOOGLE_FONT_API_KEY);
   return (
     <ApolloProvider client={client}>
       <AppProvider>

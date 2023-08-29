@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 import { INITIAL_COLORS } from '../../config/constants';
-import { SET_DISPLAY_COLOR_PICKER, SET_HEX, SET_HSL, SET_RGB, SET_COLOR_NAME } from './actions';
+import { SET_COLOR_NAME, SET_DISPLAY_COLOR_PICKER, SET_HEX, SET_HSL, SET_MODAL_OPEN, SET_RGB } from './actions';
 
 export const initialState = {
   colors: INITIAL_COLORS
@@ -28,7 +28,11 @@ export default function reducer(state = initialState, action) {
         ...state,
         displayModalPicker: action.payload
       }
-
+    case SET_MODAL_OPEN:
+      return {
+        ...state,
+        isModalOpen: action.payload
+      }
     case SET_COLOR_NAME:
       return {
         ...state,

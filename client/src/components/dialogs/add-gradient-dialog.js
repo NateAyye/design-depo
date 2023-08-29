@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DotFilledIcon, HeartIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { SketchPicker } from "react-color";
+import { HeartIcon } from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
+import ColorPicker from 'react-best-gradient-color-picker';
+import { useColorPicker } from "react-best-gradient-color-picker/lib/hooks/useColorPicker";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { generateRandomColor, hexToRgb } from "../../lib/colors";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -16,25 +16,17 @@ const formSchema = z.object({
   color: z.string()
 })
 
-const defaultPalette = {
-  name: 'Tester',
-  colors: Array(5).fill(1).map((v, i) => generateRandomColor())
-}
-
-function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }) {
+function AddGradientDialog({ onSubmit, triggerElement, name, setName, color, setColor }) {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState(palette.name);
-  const [colors, setColors] = useState(palette.colors);
-  const [activeColor, setActiveColor] = useState(palette.colors[0]);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
-  const [rgbValue, setRgbValue] = useState(hexToRgb(activeColor));
+  const { setGradient } = useColorPicker(color, setColor);
   const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(formSchema),
     values: {
       name: name,
-      color: activeColor,
+      color: color,
     },
     defaultValues: {
       name: '',
@@ -42,21 +34,29 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
     }
   })
 
+  useEffect(() => {
+    setGradient('linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
+  }, []) // eslint-disable-line 
+  // ^^^^ Leave Empty to run once on mount
+  // TODO: Fix this warning
+
+
+
   function onFormSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const paletteValues = {
+    const gradientValues = {
       name: values.name,
-      colors: colors
+      color: color
     }
-    if (onSubmit) onSubmit(paletteValues);
+    if (onSubmit) onSubmit(gradientValues);
     try {
       // TODO: Add color to database
       // const res = await api.post('/login', data);
       // navigate('/')
       toast({
         title: `Success: ${ values.name }`,
-        description: 'Color saved successfully.',
+        description: 'Gradient saved successfully.',
         variant: 'success'
       })
       setOpen(false);
@@ -73,14 +73,20 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
     const message = data?.name?.message || data?.color?.message || 'Something went wrong.';
     toast({
       title: `Error: ${ message }`,
-      description: 'Failed to save color. Please check all form fields or try again later. \n Thank you.',
+      description: 'Failed to save gradient. Please check all form fields or try again later. \n Thank you.',
       variant: 'destructive'
     })
   }
 
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(open) => {
+      if (open) {
+        setGradient(color)
+      }
+      if (displayColorPicker) return
+      setOpen(open)
+    }}>
       <DialogTrigger asChild>
         {triggerElement ? triggerElement() :
           <Button className='h-9 w-9 p-0' variant="ghost">
@@ -90,9 +96,9 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Save Palette</DialogTitle>
+          <DialogTitle>Save Gradient</DialogTitle>
           <DialogDescription>
-            Save palette to your dashboard for later use.
+            Save Gradient to your dashboard for later use.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -110,7 +116,7 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
                       <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="shadcn" {...field} />
                     </FormControl>
                     <FormDescription>
-                      The Custom Name for you Color.
+                      The Custom Name for you Gradient.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -122,7 +128,7 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
               name="color"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Color</FormLabel>
+                  <FormLabel>Gradient</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input type="text" {...field} />
@@ -133,22 +139,14 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
                         }}
                       >
                         <div className="w-9 h-4 rounded-[2px]" style={{
-                          background: `rgba(${ rgbValue.r }, ${ rgbValue.g }, ${ rgbValue.b }, ${ rgbValue.a })`,
+                          background: `${ color }`,
                         }} />
                       </div>
-                      {displayColorPicker ? <div className="absolute z-10">
+                      {displayColorPicker ? <div className="absolute left-[110%] bottom-0 translate-y-1/2 bg-white p-2 z-10">
                         <div className="fixed inset-0" onClick={() => {
-                          setDisplayColorPicker(false)
+                          // setDisplayColorPicker(false)
                         }} />
-                        <SketchPicker color={rgbValue} onChange={(color) => {
-
-                          const colorIndex = colors.findIndex((c) => c === activeColor)
-                          const newColors = [...colors]
-                          newColors[colorIndex] = color.hex
-                          setColors(newColors)
-                          setActiveColor(color.hex)
-                          setRgbValue(color.rgb)
-                        }} />
+                        <ColorPicker value={color} onChange={setColor} />
                       </div> : null}
                     </div>
                   </FormControl>
@@ -159,23 +157,7 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
                 </FormItem>
               )}
             />
-            <div className="min-h-[70px] rounded-lg overflow-hidden flex items-stretch">
-              {colors?.map((color) => (
-                <div key={color} style={{ backgroundColor: color }} onClick={() => {
-                  setRgbValue(hexToRgb(color))
-                  setActiveColor(color)
-                }} onKeyDownCapture={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    setRgbValue(hexToRgb(color))
-                    setActiveColor(color)
-                  }
-                }} role="button" tabIndex={0} className="group/palette flex justify-center items-center flex-1 hover:flex-[2]" onKeyDown={(e) => { }} >
-                  <span style={{ color: activeColor === color ? 'black' : 'white' }} className={`font-bold font-segoe ${ activeColor === color ? '' : 'sr-only' } group-hover/palette:not-sr-only`} >
-                    <DotFilledIcon className={`w-6 h-6 ${ activeColor === color ? '' : '' }`} />
-                  </span>
-                </div>
-              ))}
-            </div>
+            <div className="min-h-[70px] rounded-lg overflow-hidden flex items-stretch" style={{ background: color }} />
             <div className="flex justify-end space-x-4">
               <Button variant={'outline'} onClick={() => setOpen(false)}>Cancel</Button>
               <Button variant={'outline'} type="submit">Submit</Button>
@@ -192,4 +174,4 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
   )
 }
 
-export default AddPaletteDialog
+export default AddGradientDialog
