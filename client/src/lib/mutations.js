@@ -49,3 +49,14 @@ mutation Mutation($deleteColorId: ID!) {
     }
   }
 `;
+
+export const UPDATE_COLOR = gql`
+mutation UpdateColor($updateColorId: ID!, $hexCode: String!) {
+    updateColor(id: $updateColorId, hexCode: $hexCode) {
+      _id
+      createdAt
+      hexCode
+      references
+    }
+  }
+`;
