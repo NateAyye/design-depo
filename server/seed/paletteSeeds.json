@@ -1,0 +1,27 @@
+[
+    {
+      "paletteName": "Vibrant Colors",
+      "color1": "#FF5733",
+      "color2": "#FFC300",
+      "color3": "#C70039",
+      "color4": "#900C3F",
+      "color5": "#581845"
+    },
+    {
+      "paletteName": "Ocean Blues",
+      "color1": "#3498DB",
+      "color2": "#2980B9",
+      "color3": "#1F618D",
+      "color4": "#154360",
+      "color5": "#0B5345"
+    },
+    {
+      "paletteName": "Earth Tones",
+      "color1": "#8E44AD",
+      "color2": "#D35400",
+      "color3": "#16A085",
+      "color4": "#F39C12",
+      "color5": "#2C3E50"
+    }
+  ]
+  

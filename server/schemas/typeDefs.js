@@ -21,9 +21,22 @@ type Gradient {
     color: String!
     createdAt: String!
   }
+
 type Font {
     _id: ID!
     activeFontFamily: String!
+  }
+
+type Palette {
+    _id: ID!
+    paletteName: String!
+    createdAt: String!
+    color1: String!
+    color2: String!
+    color3: String!
+    color4: String!
+    color5: String!
+    colors: [String!]!
   }
 
 type Auth {
@@ -40,6 +53,8 @@ type Query {
     Gradient(id: ID!): Gradient
     Fonts: [Font]!
     Font(id: ID!): Font
+    Palettes: [Palette]!
+    Palette(id: ID!): Palette
   }
 
 type Mutation {
@@ -55,10 +70,29 @@ type Mutation {
     createGradient(gradientName: String!, color: String!): Gradient!
     updateGradient(id: ID!, gradientName: String!, color: String!): Gradient!
     deleteGradient(id: ID!): Gradient!
-    
+
     createFont(activeFontFamily: String!): Font
     deleteFont(id: ID!): Font
     updateFont(id: ID!, activeFontFamily: String!): Font
+
+    createPalette(
+      paletteName: String!
+      color1: String!
+      color2: String!
+      color3: String!
+      color4: String!
+      color5: String!
+    ): Palette
+    updatePalette(
+      id: ID!
+      paletteName: String
+      color1: String
+      color2: String
+      color3: String
+      color4: String
+      color5: String
+    ): Palette
+    deletePalette(id: ID!): Palette
   }
 `;
 

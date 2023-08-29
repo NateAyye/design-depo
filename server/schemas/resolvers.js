@@ -3,7 +3,7 @@ const Color = require('../models/Colors');
 const Gradients = require('../models/Gradients');
 const Fonts = require('../models/Fonts');
 const { signToken } = require('../utils/auth');
-
+const Palettes =require ('../models/Palettes');
 const resolvers = {
   Query: {
     // User Queries
@@ -21,6 +21,10 @@ const resolvers = {
     // Font Queries
     Fonts: async () => await Fonts.find(), // Get all Fonts
     Font: async (_, { id }) => await Fonts.findById(id), // Get Font by ID
+
+    // Palette Queries
+    Palettes: async () => await Palettes.find(),
+    Palette: async (_, { id }) => await Palettes.findById(id),
   },
   Mutation: {
     // User Mutations 
@@ -152,6 +156,21 @@ const resolvers = {
           throw error;
         }
       },
+    
+
+    // Palette mutations
+    createPalette: async (_, args) => {
+      const newPalette = await Palettes.create(args);
+      return newPalette;
+    },
+    updatePalette: async (_, { id, ...args }) => {
+      const updatedPalette = await Palettes.findByIdAndUpdate(id, args, { new: true });
+      return updatedPalette;
+    },
+    deletePalette: async (_, { id }) => {
+      const deletedPalette = await Palettes.findByIdAndDelete(id);
+      return deletedPalette;
+    },
 
     },
     Color: {
