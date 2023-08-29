@@ -31,6 +31,7 @@ type Font {
 
 type Palette {
     _id: ID!
+    userId: ID
     paletteName: String!
     createdAt: String!
     color1: String!
@@ -95,6 +96,7 @@ type Mutation {
     updateFont(id: ID!, activeFontFamily: String!): Font
 
     createPalette(
+      userId: ID!
       paletteName: String!
       color1: String!
       color2: String!
