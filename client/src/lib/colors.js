@@ -46,9 +46,9 @@ function hexToRgb(hex) {
   return { r: parseInt(rgbValues[0], 16), g: parseInt(rgbValues[1], 16), b: parseInt(rgbValues[2], 16), a: 1 };
 }
 
-const formatColor = (color, format) => {
+const formatColor = (color, format = 'hex6') => {
   var color1 = tinycolor(color);
-  return color1.toString(format) // "hsv(0, 100%, 100%)"
+  return color1.toString(format);
 }
 
 const getColorName = async (color) => {

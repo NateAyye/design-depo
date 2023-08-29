@@ -1,14 +1,15 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_COLOR = gql`
-mutation createColor($hexCode: String!) {
-    createColor(hexCode: $hexCode) {
-      _id
-      createdAt
-      hexCode
-      references
-    }
+mutation createColor($hexCode: String!, $name: String!, $userId: ID!) {
+  createColor(hexCode: $hexCode, name: $name, userId: $userId) {
+    _id
+    name
+    hexCode
+    userId
+    createdAt
   }
+}
 `;
 
 export const CREATE_USER = gql`

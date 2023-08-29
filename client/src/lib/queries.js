@@ -13,6 +13,8 @@ query Query {
     Colors {
       _id
       createdAt
+      name
+      userId
       hexCode
       references
     }
