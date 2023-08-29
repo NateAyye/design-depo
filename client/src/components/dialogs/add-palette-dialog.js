@@ -1,15 +1,21 @@
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DotFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { SketchPicker } from "react-color";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import * as z from "zod";
+import { useAppContext } from "../../context/AppState";
+import { ADD_PALETTE, SET_TAB } from "../../context/AppState/actions";
 import authService from "../../lib/auth";
 import { generateRandomColor, hexToRgb } from "../../lib/colors";
+import { CREATE_PALETTE } from "../../lib/mutations";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
@@ -22,13 +28,16 @@ const defaultPalette = {
   colors: Array(5).fill(1).map((v, i) => generateRandomColor())
 }
 
-function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }) {
+function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastAction }) {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [, appDispatch] = useAppContext();
+  const navigate = useNavigate();
   const [name, setName] = useState(palette.name);
   const [colors, setColors] = useState(palette.colors);
   const [activeColor, setActiveColor] = useState(palette.colors[0]);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const [createPalette] = useMutation(CREATE_PALETTE);
   const [rgbValue, setRgbValue] = useState(hexToRgb(activeColor));
   const { toast } = useToast();
   const form = useForm({
@@ -47,19 +56,35 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
     setColors(palette.colors)
   }, [palette])
 
-  function onFormSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onFormSubmit(values) {
     const paletteValues = {
-      name: values.name,
-      colors: colors
+      userId: authService.getProfile().data._id,
+      paletteName: values.name,
+      color1: colors[0],
+      color2: colors[1],
+      color3: colors[2],
+      color4: colors[3],
+      color5: colors[4]
     }
     try {
-      // TODO: Add color to database
-      if (onSubmit) onSubmit(paletteValues);
+      const mutationResponse = await createPalette({ variables: { ...paletteValues } })
+      const palette = mutationResponse.data;
+      appDispatch({ type: ADD_PALETTE, payload: palette.createPalette })
       toast({
         title: `Success: ${ values.name }`,
         description: 'Color saved successfully.',
+        action: !toastAction ? null : (
+          <ToastAction
+            onClick={() => {
+              appDispatch({ type: SET_TAB, payload: 'palettes' })
+              localStorage.setItem('activeDashboardTab', 'palettes')
+              navigate('/dashboard')
+            }}
+            altText="Go to Colors Tab"
+          >
+            View
+          </ToastAction>
+        ),
         variant: 'success'
       })
       setOpen(false);
