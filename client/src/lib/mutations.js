@@ -31,7 +31,6 @@ mutation User($email: String!, $password: String!) {
         _id
         email
         name
-        password
       }
     }
   }
