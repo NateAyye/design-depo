@@ -1,5 +1,5 @@
 const  User  = require('../models/User');
-const Color = require('../models/Colors')
+const Color = require('../models/Colors');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -46,10 +46,8 @@ const resolvers = {
     
       // Colors Mutations
       createColor: async (_, { hexCode }) => {
-        const newColor = new Color({
-          hexCode,
-        });
-        await newColor.save();
+        const newColor = await Color.create({hexCode,});
+        //await newColor.save();
         return newColor;
       },
       deleteColor: async (_, { id }) => {
@@ -77,16 +75,16 @@ const resolvers = {
         } catch (error) {
           throw error;
         }
-      },  
-      Color: {
-        references: async (parent) => {
-          try {
-            const countMessage = await Color.countReferences(parent.hexCode);
-            return countMessage;
-          } catch (error) {
-            throw error;
-          }
-        },
+      },        
+    },
+    Color: {
+      references: async (parent) => {
+        try {
+          const countMessage = await Color.countReferences(parent.hexCode);
+          return countMessage;
+        } catch (error) {
+          throw error;
+        }
       },
     },
 };
