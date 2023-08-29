@@ -40,3 +40,14 @@ query Gradients {
     }
   }
 `;
+
+export const QUERY_SINGLE_USER = gql`
+query User($userId: ID!) {
+    User(UserId: $userId) {
+      _id
+      email
+      name
+      password
+    }
+  }
+`;
