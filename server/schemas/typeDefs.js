@@ -39,6 +39,16 @@ type Palette {
     colors: [String!]!
   }
 
+type Project {
+    _id: ID!
+    userName: User!
+    projectName: String!
+    palettes: [Palette]
+    gradients: [Gradient]
+    colors: [Color]
+    fonts: [Font]
+}
+
 type Auth {
     token: ID!
     User: User
@@ -47,14 +57,21 @@ type Auth {
 type Query {
     Users: [User]!
     User(UserId: ID!): User
+
     Colors: [Color]!
     Color(id: ID!): Color
+
     Gradients: [Gradient]!
     Gradient(id: ID!): Gradient
+
     Fonts: [Font]!
     Font(id: ID!): Font
+
     Palettes: [Palette]!
     Palette(id: ID!): Palette
+
+    Projects: [Project]!
+    Project(id: ID!): Project
   }
 
 type Mutation {
@@ -93,6 +110,10 @@ type Mutation {
       color5: String
     ): Palette
     deletePalette(id: ID!): Palette
+
+    createProject(userName: ID!, projectName: String!): Project
+    deleteProject(id: ID!): Project
+    updateProjectName(id: ID!, newProjectName: String!): Project
   }
 `;
 

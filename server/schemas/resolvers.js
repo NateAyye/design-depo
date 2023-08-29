@@ -2,8 +2,10 @@ const  User  = require('../models/User');
 const Color = require('../models/Colors');
 const Gradients = require('../models/Gradients');
 const Fonts = require('../models/Fonts');
-const { signToken } = require('../utils/auth');
 const Palettes =require ('../models/Palettes');
+const Project =require ('../models/Projects');
+const { signToken } = require('../utils/auth');
+
 const resolvers = {
   Query: {
     // User Queries
@@ -23,8 +25,12 @@ const resolvers = {
     Font: async (_, { id }) => await Fonts.findById(id), // Get Font by ID
 
     // Palette Queries
-    Palettes: async () => await Palettes.find(),
-    Palette: async (_, { id }) => await Palettes.findById(id),
+    Palettes: async () => await Palettes.find(), // Get all Palettes
+    Palette: async (_, { id }) => await Palettes.findById(id), // Get Palette by ID
+
+    // Project Queries
+    Projects: async () => await Project.find(),
+    Project: async (_, { id }) => await Project.findById(id),
   },
   Mutation: {
     // User Mutations 
@@ -61,7 +67,6 @@ const resolvers = {
       // Colors Mutations
       createColor: async (_, { hexCode }) => {
         const newColor = await Color.create({hexCode,});
-        //await newColor.save();
         return newColor;
       },
       deleteColor: async (_, { id }) => {
@@ -94,7 +99,6 @@ const resolvers = {
     // Grafient mutations
     createGradient: async (_, { gradientName, color }) => {
         const newGradient = await Gradients.create({gradientName,color,});
-        //await newGradient.save();
         return newGradient;
       },
     updateGradient: async (_, { id, gradientName, color }) => {
@@ -127,7 +131,6 @@ const resolvers = {
         const newFont = await Fonts.create({
           activeFontFamily,
         });
-        //await newFont.save();
         return newFont;
       },
     deleteFont: async (_, { id }) => {
@@ -172,8 +175,25 @@ const resolvers = {
       return deletedPalette;
     },
 
+    // Project mutations
+    createProject: async (_, { userName, projectName }) => {
+      const newProject = await Project.create({ userName, projectName });
+        return newProject;
     },
-    Color: {
+    deleteProject: async (_, { id }) => {
+        const deletedProject = await Project.findByIdAndDelete(id);
+        return deletedProject;
+    },
+    updateProjectName: async (_, { id, newProjectName }) => {
+        const updatedProject = await Project.findByIdAndUpdate(
+            id,
+            { projectName: newProjectName },
+            { new: true }
+        );
+      return updatedProject;
+    },
+  },
+  Color: {
       references: async (parent) => {
         try {
           const countMessage = await Color.countReferences(parent.hexCode);
@@ -182,7 +202,30 @@ const resolvers = {
           throw error;
         }
       },
+  },
+  Project: {
+    userName: async (parent) => {
+        const user = await User.findById(parent.userName);
+        return user;
     },
+    palettes: async (parent) => {
+        const palettes = await Palettes.find({ _id: { $in: parent.palettes } });
+        return palettes;
+    },
+    gradients: async (parent) => {
+        const gradients = await Gradients.find({ _id: { $in: parent.gradients } });
+        return gradients;
+    },
+    colors: async (parent) => {
+        const colors = await Color.find({ _id: { $in: parent.colors } });
+        return colors;
+    },
+    fonts: async (parent) => {
+        const fonts = await Fonts.find({ _id: { $in: parent.fonts } });
+        return fonts;
+    },
+},
+
 
 };
 
