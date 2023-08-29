@@ -15,6 +15,13 @@ type Color {
     references: String
   }
 
+type Gradient {
+    _id: ID!
+    gradientName: String!
+    color: String!
+    createdAt: String!
+  }
+
 type Auth {
     token: ID!
     User: User
@@ -25,8 +32,8 @@ type Query {
     User(UserId: ID!): User
     Colors: [Color]!
     Color(id: ID!): Color
-    Gradients: [Color]!
-    Gradient(id: ID!): Color
+    Gradients: [Gradient]!
+    Gradient(id: ID!): Gradient
   }
 
 type Mutation {
@@ -37,6 +44,9 @@ type Mutation {
     createColor(hexCode: String!): Color
     deleteColor(id: ID!): Color
     updateColor(id: ID!, hexCode: String!): Color
+    createGradient(gradientName: String!, color: String!): Gradient!
+    updateGradient(id: ID!, gradientName: String!, color: String!): Gradient!
+    deleteGradient(id: ID!): Gradient!
   }
 `;
 
