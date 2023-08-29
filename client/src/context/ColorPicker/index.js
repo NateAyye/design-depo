@@ -28,7 +28,7 @@ const ColorPickerProvider = ({ value = [], ...props }) => {
 
   const onKeyDown = useCallback(async (e) => {
     if (appState.isModalOpen) return;
-    if (e.code === 'Space') {
+    if (e.code === 'Space' && e.ctrlKey) {
       e.preventDefault();
       const randomColor = generateRandomColor();
       await resetColor(randomColor);
