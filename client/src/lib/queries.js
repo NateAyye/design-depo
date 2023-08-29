@@ -51,3 +51,15 @@ query User($userId: ID!) {
     }
   }
 `;
+
+export const QUERY_ALL_USERS = gql`
+    query Users {
+        Users {
+            _id
+            email
+            name
+            password
+        }
+    }
+  }
+`;
