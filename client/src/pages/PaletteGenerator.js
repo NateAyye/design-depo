@@ -8,7 +8,7 @@ import { Button } from "../components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
 import { useToast } from "../components/ui/use-toast";
 import { useAppContext } from "../context/AppState";
-import { ADD_COLOR, ADD_PALETTE } from "../context/AppState/actions";
+import { ADD_COLOR } from "../context/AppState/actions";
 import { useCopy } from "../hooks/useCopy";
 import { generateRandomColor } from "../lib/colors";
 
@@ -93,9 +93,7 @@ function PaletteGenerator() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <AddPaletteDialog onSubmit={(values) => {
-                    appDispatch({ type: ADD_PALETTE, payload: values })
-                  }} palette={{ name: '', colors: paletteState }} />
+                  <AddPaletteDialog palette={{ name: '', colors: paletteState }} />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Save Palette</p>
