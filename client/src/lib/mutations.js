@@ -71,5 +71,9 @@ mutation Mutation($updateUserNameId: ID!, $newName: String!) {
 `;
 
 export const ADD_GRADIENT = gql`
-
+mutation Mutation($gradientName: String!, $color: String!) {
+    createGradient(gradientName: $gradientName, color: $color) {
+      
+    }
+  }
 `;
