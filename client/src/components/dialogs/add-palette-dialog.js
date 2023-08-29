@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DotFilledIcon, HeartIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SketchPicker } from "react-color";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import authService from "../../lib/auth";
 import { generateRandomColor, hexToRgb } from "../../lib/colors";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -42,6 +43,10 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
     }
   })
 
+  useEffect(() => {
+    setColors(palette.colors)
+  }, [palette])
+
   function onFormSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -49,11 +54,9 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
       name: values.name,
       colors: colors
     }
-    if (onSubmit) onSubmit(paletteValues);
     try {
       // TODO: Add color to database
-      // const res = await api.post('/login', data);
-      // navigate('/')
+      if (onSubmit) onSubmit(paletteValues);
       toast({
         title: `Success: ${ values.name }`,
         description: 'Color saved successfully.',
@@ -95,98 +98,106 @@ function AddPaletteDialog({ onSubmit, triggerElement, palette = defaultPalette }
             Save palette to your dashboard for later use.
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onFormSubmit, onError)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => {
-                delete field.value
-                delete field.onChange
-                return (
+        {!authService.loggedIn() ? (
+          <div>
+            <p className="text-center">Please login to save Palettes.</p>
+          </div>
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onFormSubmit, onError)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => {
+                  delete field.value
+                  delete field.onChange
+                  return (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="shadcn" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        The Custom Name for you Color.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Color</FormLabel>
                     <FormControl>
-                      <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="shadcn" {...field} />
+                      <div className="relative">
+                        <Input type="text" {...field} />
+                        <div
+                          className="p-1 bg-white rounded-[1px] shadow-sm inline-block cursor-pointer absolute right-1 top-1/2 -translate-y-1/2"
+                          onClick={() => {
+                            setDisplayColorPicker(!displayColorPicker)
+                          }}
+                        >
+                          <div className="w-9 h-4 rounded-[2px]" style={{
+                            background: `rgba(${ rgbValue.r }, ${ rgbValue.g }, ${ rgbValue.b }, ${ rgbValue.a })`,
+                          }} />
+                        </div>
+                        {displayColorPicker ? <div className="absolute z-10">
+                          <div className="fixed inset-0" onClick={() => {
+                            setDisplayColorPicker(false)
+                          }} />
+                          <SketchPicker color={rgbValue} onChange={(color) => {
+
+                            const colorIndex = colors.findIndex((c) => c === activeColor)
+                            const newColors = [...colors]
+                            newColors[colorIndex] = color.hex
+                            setColors(newColors)
+                            setActiveColor(color.hex)
+                            setRgbValue(color.rgb)
+                          }} />
+                        </div> : null}
+                      </div>
                     </FormControl>
                     <FormDescription>
-                      The Custom Name for you Color.
+                      Color Value
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
-                )
-              }}
-            />
-            <FormField
-              control={form.control}
-              name="color"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Color</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input type="text" {...field} />
-                      <div
-                        className="p-1 bg-white rounded-[1px] shadow-sm inline-block cursor-pointer absolute right-1 top-1/2 -translate-y-1/2"
-                        onClick={() => {
-                          setDisplayColorPicker(!displayColorPicker)
-                        }}
-                      >
-                        <div className="w-9 h-4 rounded-[2px]" style={{
-                          background: `rgba(${ rgbValue.r }, ${ rgbValue.g }, ${ rgbValue.b }, ${ rgbValue.a })`,
-                        }} />
-                      </div>
-                      {displayColorPicker ? <div className="absolute z-10">
-                        <div className="fixed inset-0" onClick={() => {
-                          setDisplayColorPicker(false)
-                        }} />
-                        <SketchPicker color={rgbValue} onChange={(color) => {
-
-                          const colorIndex = colors.findIndex((c) => c === activeColor)
-                          const newColors = [...colors]
-                          newColors[colorIndex] = color.hex
-                          setColors(newColors)
-                          setActiveColor(color.hex)
-                          setRgbValue(color.rgb)
-                        }} />
-                      </div> : null}
-                    </div>
-                  </FormControl>
-                  <FormDescription>
-                    Color Value
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="min-h-[70px] rounded-lg overflow-hidden flex items-stretch">
-              {colors?.map((color) => (
-                <div key={color} style={{ backgroundColor: color }} onClick={() => {
-                  setRgbValue(hexToRgb(color))
-                  setActiveColor(color)
-                }} onKeyDownCapture={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
+                )}
+              />
+              <div className="min-h-[70px] rounded-lg overflow-hidden flex items-stretch">
+                {colors?.map((color) => (
+                  <div key={color} style={{ backgroundColor: color }} onClick={() => {
                     setRgbValue(hexToRgb(color))
                     setActiveColor(color)
-                  }
-                }} role="button" tabIndex={0} className="group/palette flex justify-center items-center flex-1 hover:flex-[2]" onKeyDown={(e) => { }} >
-                  <span style={{ color: activeColor === color ? 'black' : 'white' }} className={`font-bold font-segoe ${ activeColor === color ? '' : 'sr-only' } group-hover/palette:not-sr-only`} >
-                    <DotFilledIcon className={`w-6 h-6 ${ activeColor === color ? '' : '' }`} />
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-end space-x-4">
-              <Button variant={'outline'} onClick={() => setOpen(false)}>Cancel</Button>
-              <Button variant={'outline'} type="submit">Submit</Button>
-            </div>
-          </form>
-          {error && (
-            <div className="bg-red-500 mt-2 text-white w-fit text-sm py-1 px-3 rounded">
-              {error}
-            </div>
-          )}
-        </Form>
+                  }} onKeyDownCapture={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setRgbValue(hexToRgb(color))
+                      setActiveColor(color)
+                    }
+                  }} role="button" tabIndex={0} className="group/palette flex justify-center items-center flex-1 hover:flex-[2]" onKeyDown={(e) => { }} >
+                    <span style={{ color: activeColor === color ? 'black' : 'white' }} className={`font-bold font-segoe ${ activeColor === color ? '' : 'sr-only' } group-hover/palette:not-sr-only`} >
+                      <DotFilledIcon className={`w-6 h-6 ${ activeColor === color ? '' : '' }`} />
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-start flex-row-reverse gap-3 space-x-4">
+                <Button variant={'outline'} type="submit">Submit</Button>
+                <Button variant={'outline'} onClick={(e) => {
+                  e.preventDefault();
+                  setOpen(false)
+                }}>Cancel</Button>
+              </div>
+            </form>
+            {error && (
+              <div className="bg-red-500 mt-2 text-white w-fit text-sm py-1 px-3 rounded">
+                {error}
+              </div>
+            )}
+          </Form>)}
       </DialogContent>
     </Dialog>
   )

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { default as Auth, default as authService } from "../lib/auth";
 import { cn } from "../lib/utils";
@@ -11,6 +12,16 @@ import {
 import { ModeToggle } from "./ui/theme-toggle";
 
 function Navbar() {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+
+  useEffect(() => {
+    if (authService.isTokenExpired(authService.getToken()) || !authService.loggedIn()) {
+      setIsUserLoggedIn(false)
+    } else {
+      setIsUserLoggedIn(true)
+    }
+  }, [])
+
   return (
     <div className=" border-b">
       <div className="container flex justify-between items-center">
@@ -35,13 +46,19 @@ function Navbar() {
                 <Link to="/palette-generator">Palette Generator</Link>
               </Button>
             </li>
-            {Auth.loggedIn() ? (
+            {!isUserLoggedIn ? (
+              <li>
+                <Button variant="primary" asChild>
+                  <Link to="/auth">Login</Link>
+                </Button>
+              </li>
+            ) : (
               <li>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="rounded-full">
                     <Avatar className={cn('ring-0 ring-white hover:ring-2 border-none transition-all duration-150 ')}>
                       <AvatarImage src="" />
-                      <AvatarFallback>{Auth.getProfile().name.split(0, 2)}</AvatarFallback>
+                      <AvatarFallback>{Auth.getProfile().data.name.slice(0, 2)}</AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
@@ -69,12 +86,6 @@ function Navbar() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </li>
-            ) : (
-              <li>
-                <Button variant="primary" asChild>
-                  <Link to="/auth">Login</Link>
-                </Button>
               </li>
             )}
             <li>

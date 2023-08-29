@@ -1,4 +1,4 @@
-import { CopyIcon, DotFilledIcon, SizeIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { CopyIcon, SizeIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { useCallback, useState } from "react";
 import { ChromePicker } from "react-color";
 import tinycolor from "tinycolor2";
@@ -6,20 +6,20 @@ import AddColorDialog from "../components/dialogs/add-color-dialog";
 import { Button } from "../components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
-import { useToast } from "../components/ui/use-toast";
 import { COLOR_HARMONIES } from "../config/constants";
 import { useAppContext } from "../context/AppState";
-import { ADD_COLOR, SET_MODAL_OPEN } from "../context/AppState/actions";
 import { useColorPickerContext } from "../context/ColorPicker";
 import { SET_COLOR_NAME, SET_HEX, SET_RGB } from "../context/ColorPicker/actions";
-import { formatColor, generateRandomColor, getColorName, getTextColor, hexToRgb } from "../lib/colors";
+import { useCopy } from "../hooks/useCopy";
+import { generateRandomColor, getColorName, getTextColor, hexToRgb } from "../lib/colors";
 import { properCase } from "../lib/utils";
+import ColorVariantButton from "../components/color-variant-btn";
 
 function ColorPicker() {
   const [state, dispatch] = useColorPickerContext();
-  const [appState, appDispatch] = useAppContext();
+  const [appState] = useAppContext();
   const [opacityBg, setOpacityBg] = useState("1");
-  const { toast } = useToast()
+  const { CopyAndAlert } = useCopy()
   const [background, setBackground] = useState({
     h: 250,
     s: 0,
@@ -27,17 +27,6 @@ function ColorPicker() {
     a: 1
   });
   const color = tinycolor(state.hexValue);
-
-  function CopyAndAlert(color) {
-    const formatedColor = formatColor(color)
-    navigator.clipboard.writeText(formatedColor);
-    // Alert the copied text
-    toast({
-      title: `Copied ${ formatedColor } to clipboard.`,
-      description: 'Copied color to clipboard.',
-      variant: 'success'
-    })
-  }
 
   const resetColor = useCallback(async (colorVal) => {
     dispatch({ type: SET_HEX, payload: colorVal })
@@ -71,7 +60,7 @@ function ColorPicker() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button onClick={() => {
-                  CopyAndAlert(state.hexValue);
+                  CopyAndAlert({ content: state.hexValue });
                 }} variant='ghost'>
                   <CopyIcon />
                 </Button>
@@ -109,10 +98,7 @@ function ColorPicker() {
           <div className="absolute top-3 right-4 flex justify-center items-center gap-3">
             <AddColorDialog
               {...dialogProps}
-              onSubmit={(values) => {
-                appDispatch({ type: ADD_COLOR, payload: values })
-              }}
-              setModalOpen={(open) => appDispatch({ type: SET_MODAL_OPEN, payload: open })}
+              toastAction
               defaults={{ name: state.colorName, color: state.hexValue }}
             />
             <Sheet>
@@ -146,51 +132,27 @@ function ColorPicker() {
             <h3 className="text-3xl font-bold font-segoe mb-5">Lighten</h3>
           </div>
           <div className="min-h-[100px] shadow-md rounded-lg overflow-hidden flex ">
-            {new Array(10).fill(0).map((_, i) => {
-              const currentColor = tinycolor(state.hexValue).lighten((i) * 5).toString();
-              return (
-                <div role="button" tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.code === 'Space' || e.code === 'Enter') {
-                      CopyAndAlert(color.color);
-                    }
-                  }}
-                  onClick={() => {
-                    CopyAndAlert(currentColor);
-                  }} className="flex-1 flex group/lighten justify-center items-center hover:flex-[2] focus-visible:flex-[2] rounded-none" style={{ backgroundColor: currentColor }} key={i}>
-                  <span className={` ${ currentColor === color.toString('hex') ? 'visible' : 'invisible' }`} style={{ color: getTextColor(color.toString(appState.colorFormat)) }}>
-                    <DotFilledIcon className="w-8 h-8" />
-                  </span>
-                  <span className="hidden group-hover/lighten:flex group-focus-visible/lighten:flex" style={{ color: getTextColor(currentColor) }}>{currentColor}</span>
-                </div>
-              )
-            })}
+            {new Array(10).fill(0).map((_, i) => (
+              <ColorVariantButton
+                key={i}
+                color={color}
+                currentColor={tinycolor(state.hexValue).lighten((i) * 5).toString(appState.colorFormat)}
+              />
+            ))}
           </div>
         </div>
         <div>
           <div className="flex justify-between items-start mx-5 sm:items-center flex-col sm:flex-row">
             <h3 className="text-3xl font-bold font-segoe mb-5">Darken</h3>
           </div>
-          <div className="min-h-[100px] shadow-md rounded-lg overflow-hidden flex ">
-            {new Array(11).fill(0).map((_, i) => {
-              const currentColor = tinycolor(state.hexValue).darken((i) * 5).toString();
-              return (
-                <div role="button" tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.code === 'Space' || e.code === 'Enter') {
-                      CopyAndAlert(color.color);
-                    }
-                  }}
-                  onClick={() => {
-                    CopyAndAlert(currentColor);
-                  }} className="flex-1 flex group/darken justify-center items-center hover:flex-[2] focus-visible:flex-[2] rounded-none" style={{ backgroundColor: currentColor }} key={i}>
-                  <span className={` ${ currentColor === color.toString('hex') ? 'visible' : 'invisible' }`} style={{ color: getTextColor(color.toString(appState.colorFormat)) }}>
-                    <DotFilledIcon className="w-8 h-8" />
-                  </span>
-                  <span className="hidden group-hover/darken:flex group-focus-visible/darken:flex" style={{ color: getTextColor(currentColor) }}>{currentColor}</span>
-                </div>
-              )
-            })}
+          <div className=" shadow-md rounded-lg overflow-hidden flex items-center justify-stretch ">
+            {new Array(11).fill(0).map((_, i) => (
+              <ColorVariantButton
+                key={i}
+                color={color}
+                currentColor={tinycolor(state.hexValue).darken((i) * 5).toString()}
+              />
+            ))}
           </div>
         </div>
         <div>
@@ -198,25 +160,14 @@ function ColorPicker() {
             <h3 className="text-3xl font-bold font-segoe mb-5">Hue Shift</h3>
           </div>
           <div className="min-h-[100px] shadow-md rounded-lg overflow-hidden flex ">
-            {new Array(11).fill(0).map((_, i) => {
-              const currentColor = tinycolor(state.hexValue).spin((i - 5) * 10).toString();
-              return (
-                <div role="button" tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.code === 'Space' || e.code === 'Enter') {
-                      CopyAndAlert(color.color);
-                    }
-                  }}
-                  onClick={() => {
-                    CopyAndAlert(currentColor);
-                  }} className="flex-1 flex group justify-center items-center hover:flex-[2] focus-visible:flex-[2] rounded-none" style={{ backgroundColor: currentColor }} key={i}>
-                  <span className={` ${ currentColor === color.toString('hex') ? 'visible' : 'invisible' }`} style={{ color: getTextColor(color.toString(appState.colorFormat)) }}>
-                    <DotFilledIcon className="w-8 h-8" />
-                  </span>
-                  <span className="hidden group-hover:flex group-focus-visible:flex" style={{ color: getTextColor(currentColor) }}>{currentColor}</span>
-                </div>
-              )
-            })}
+            {new Array(11).fill(0).map((_, i) => (
+              <ColorVariantButton
+                key={i}
+                color={color}
+                currentColor={tinycolor(state.hexValue).spin((i - 5) * 5).toString(appState.colorFormat)}
+              />
+            )
+            )}
           </div>
         </div>
       </section>
@@ -231,38 +182,14 @@ function ColorPicker() {
                 <h3 className="text-3xl font-bold font-segoe mb-5">{properCase(harmony.label)}</h3>
               </div>
               <div className="min-h-[100px] rounded-lg overflow-hidden flex shadow-md">
-                {harmony.buildColors(color.toHex()).map((variant, i) => {
-                  return (
-                    <div
-                      key={i}
-                      role="button"
-                      tabIndex={0}
-                      className="flex-1 flex group justify-center items-center hover:flex-[2] focus-visible:flex-[2] rounded-none"
-                      style={{ backgroundColor: variant.toString(appState.colorFormat) }}
-                      onKeyDown={(e) => {
-                        if (e.code === 'Space' || e.code === 'Enter') {
-                          CopyAndAlert(variant.toString(appState.colorFormat));
-                        }
-                      }}
-                      onClick={() => {
-                        CopyAndAlert(variant.toString(appState.colorFormat));
-                      }}
-                    >
-                      <span
-                        className={` ${ variant.toString('hex') === color.toString('hex') ? 'visible' : 'invisible' }`}
-                        style={{ color: getTextColor(color.toString(appState.colorFormat)) }}
-                      >
-                        <DotFilledIcon className="w-8 h-8" />
-                      </span>
-                      <span
-                        className="hidden group-hover:flex group-focus-visible:flex"
-                        style={{ color: getTextColor(variant.toString(appState.colorFormat)) }}
-                      >
-                        {variant.toString(appState.colorFormat)}
-                      </span>
-                    </div>
-                  )
-                })}
+                {harmony.buildColors(color.toHex()).map((variant, i) => (
+                  <ColorVariantButton
+                    key={i}
+                    color={color}
+                    currentColor={variant.toString(appState.colorFormat)}
+                  />
+                )
+                )}
               </div>
             </div>
           ))}
