@@ -1,8 +1,11 @@
+import { useMutation } from '@apollo/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as z from 'zod';
+import Auth from '../../lib/auth';
+import { LOGIN_USER } from '../../lib/mutations';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -30,6 +33,8 @@ const formSchema = z.object({
 const LoginForm = () => {
   const [error, setError] = React.useState(null);
   const navigate = useNavigate();
+  const [login] = useMutation(LOGIN_USER);
+
   const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -42,6 +47,14 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     try {
       // const res = await api.post('/login', data);
+      const mutationResponse = await login({
+        variables: {
+          email: data.email,
+          password: data.password,
+        }
+      })
+      const token = mutationResponse.data.login.token;
+      Auth.login(token);
       navigate('/')
     } catch (error) {
       setError(error?.response?.data?.message || 'Something went wrong.');

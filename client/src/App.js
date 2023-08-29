@@ -37,7 +37,6 @@ const client = new ApolloClient({
 });
 
 function App() {
-  console.log(process.env.GOOGLE_FONT_API_KEY);
   return (
     <ApolloProvider client={client}>
       <AppProvider>
