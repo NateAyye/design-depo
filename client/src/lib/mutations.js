@@ -12,27 +12,25 @@ mutation createColor($hexCode: String!) {
 `;
 
 export const CREATE_USER = gql`
-mutation createUser($name: String!, $email: String!, $password: String!) {
+mutation CreateUser($name: String!, $email: String!, $password: String!) {
     createUser(name: $name, email: $email, password: $password) {
-      token
       User {
         _id
-        name
         email
+        name
         password
       }
     }
   }
 `;
 export const LOGIN_USER = gql`
-mutation loginUser($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
+mutation User($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       token
       User {
         _id
-        name
         email
-        password
+        name
       }
     }
   }
@@ -80,9 +78,12 @@ mutation Mutation($updateUserNameId: ID!, $newName: String!) {
 `;
 
 export const ADD_GRADIENT = gql`
-mutation Mutation($gradientName: String!, $color: String!) {
+mutation CreateGradient($gradientName: String!, $color: String!) {
     createGradient(gradientName: $gradientName, color: $color) {
-      name
+      _id
+      color
+      createdAt
+      gradientName
     }
   }
 `;
