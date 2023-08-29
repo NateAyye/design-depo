@@ -2,8 +2,8 @@ const User = require('../models/User');
 const Color = require('../models/Colors');
 const Gradients = require('../models/Gradients');
 const Fonts = require('../models/Fonts');
-const Palettes =require ('../models/Palettes');
-const Project =require ('../models/Projects');
+const Palettes = require('../models/Palettes');
+const Project = require('../models/Projects');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -54,53 +54,53 @@ const resolvers = {
         throw new AuthenticationError('No User with this email found!');
       }
 
-        const correctPw = await currentUser.isCorrectPassword(password);
-  
-        if (!correctPw) {
-          throw new AuthenticationError('Incorrect password!');
+      const correctPw = await currentUser.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect password!');
+      }
+
+      const token = signToken(currentUser);
+      return { token, currentUser };
+    },
+
+    // Colors Mutations
+    createColor: async (_, { hexCode, name, userId }) => {
+      const newColor = await Color.create({ hexCode, name, userId });
+      return newColor;
+    },
+    deleteColor: async (_, { id }) => {
+      try {
+        const deletedColor = await Color.findByIdAndDelete(id);
+        if (!deletedColor) {
+          throw new Error('Color not found');
         }
-  
-        const token = signToken(currentUser);
-        return { token, currentUser };
-      },
-    
-      // Colors Mutations
-      createColor: async (_, { hexCode }) => {
-        const newColor = await Color.create({hexCode,});
-        return newColor;
-      },
-      deleteColor: async (_, { id }) => {
-        try {
-          const deletedColor = await Color.findByIdAndDelete(id);
-          if (!deletedColor) {
-            throw new Error('Color not found');
-          }
-          return deletedColor;
-        } catch (error) {
-          throw error;
+        return deletedColor;
+      } catch (error) {
+        throw error;
+      }
+    },
+    updateColor: async (_, { id, hexCode }) => {
+      try {
+        const updatedColor = await Color.findByIdAndUpdate(
+          id,
+          { hexCode },
+          { new: true }
+        );
+        if (!updatedColor) {
+          throw new Error('Color not found');
         }
-      },
-      updateColor: async (_, { id, hexCode }) => {
-        try {
-          const updatedColor = await Color.findByIdAndUpdate(
-            id,
-            { hexCode },
-            { new: true }
-          );
-          if (!updatedColor) {
-            throw new Error('Color not found');
-          }
-          return updatedColor;
-        } catch (error) {
-          throw error;
-        }
-      },
+        return updatedColor;
+      } catch (error) {
+        throw error;
+      }
+    },
 
     // Grafient mutations
     createGradient: async (_, { gradientName, color }) => {
-        const newGradient = await Gradients.create({gradientName,color,});
-        return newGradient;
-      },
+      const newGradient = await Gradients.create({ gradientName, color, });
+      return newGradient;
+    },
     updateGradient: async (_, { id, gradientName, color }) => {
       try {
         const updatedGradient = await Gradients.findByIdAndUpdate(
@@ -128,11 +128,11 @@ const resolvers = {
       }
     },
     createFont: async (_, { activeFontFamily }) => {
-        const newFont = await Fonts.create({
-          activeFontFamily,
-        });
-        return newFont;
-      },
+      const newFont = await Fonts.create({
+        activeFontFamily,
+      });
+      return newFont;
+    },
     deleteFont: async (_, { id }) => {
       try {
         const deletedFont = await Fonts.findByIdAndDelete(id);
@@ -145,21 +145,21 @@ const resolvers = {
       }
     },
     updateFont: async (_, { id, activeFontFamily }) => {
-        try {
-          const updatedFont = await Fonts.findByIdAndUpdate(
-            id,
-            { activeFontFamily },
-            { new: true }
-          );
-          if (!updatedFont) {
-            throw new Error('Font not found');
-          }
-          return updatedFont;
-        } catch (error) {
-          throw error;
+      try {
+        const updatedFont = await Fonts.findByIdAndUpdate(
+          id,
+          { activeFontFamily },
+          { new: true }
+        );
+        if (!updatedFont) {
+          throw new Error('Font not found');
         }
-      },
-    
+        return updatedFont;
+      } catch (error) {
+        throw error;
+      }
+    },
+
 
     // Palette mutations
     createPalette: async (_, args) => {
@@ -178,53 +178,53 @@ const resolvers = {
     // Project mutations
     createProject: async (_, { userName, projectName }) => {
       const newProject = await Project.create({ userName, projectName });
-        return newProject;
+      return newProject;
     },
     deleteProject: async (_, { id }) => {
-        const deletedProject = await Project.findByIdAndDelete(id);
-        return deletedProject;
+      const deletedProject = await Project.findByIdAndDelete(id);
+      return deletedProject;
     },
     updateProjectName: async (_, { id, newProjectName }) => {
-        const updatedProject = await Project.findByIdAndUpdate(
-            id,
-            { projectName: newProjectName },
-            { new: true }
-        );
+      const updatedProject = await Project.findByIdAndUpdate(
+        id,
+        { projectName: newProjectName },
+        { new: true }
+      );
       return updatedProject;
     },
   },
   Color: {
-      references: async (parent) => {
-        try {
-          const countMessage = await Color.countReferences(parent.hexCode);
-          return countMessage;
-        } catch (error) {
-          throw error;
-        }
-      },
+    references: async (parent) => {
+      try {
+        const countMessage = await Color.countReferences(parent.hexCode);
+        return countMessage;
+      } catch (error) {
+        throw error;
+      }
+    },
   },
   Project: {
     userName: async (parent) => {
-        const user = await User.findById(parent.userName);
-        return user;
+      const user = await User.findById(parent.userName);
+      return user;
     },
     palettes: async (parent) => {
-        const palettes = await Palettes.find({ _id: { $in: parent.palettes } });
-        return palettes;
+      const palettes = await Palettes.find({ _id: { $in: parent.palettes } });
+      return palettes;
     },
     gradients: async (parent) => {
-        const gradients = await Gradients.find({ _id: { $in: parent.gradients } });
-        return gradients;
+      const gradients = await Gradients.find({ _id: { $in: parent.gradients } });
+      return gradients;
     },
     colors: async (parent) => {
-        const colors = await Color.find({ _id: { $in: parent.colors } });
-        return colors;
+      const colors = await Color.find({ _id: { $in: parent.colors } });
+      return colors;
     },
     fonts: async (parent) => {
-        const fonts = await Fonts.find({ _id: { $in: parent.fonts } });
-        return fonts;
+      const fonts = await Fonts.find({ _id: { $in: parent.fonts } });
+      return fonts;
     },
-},
+  },
 
 
 };

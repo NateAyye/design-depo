@@ -15,6 +15,7 @@ mutation createColor($hexCode: String!, $name: String!, $userId: ID!) {
 export const CREATE_USER = gql`
 mutation CreateUser($name: String!, $email: String!, $password: String!) {
     createUser(name: $name, email: $email, password: $password) {
+      token
       User {
         _id
         email

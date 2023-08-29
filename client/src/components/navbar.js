@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { default as Auth, default as authService } from "../lib/auth";
 import { cn } from "../lib/utils";
@@ -12,15 +11,6 @@ import {
 import { ModeToggle } from "./ui/theme-toggle";
 
 function Navbar() {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
-
-  useEffect(() => {
-    if (authService.isTokenExpired(authService.getToken()) || !authService.loggedIn()) {
-      setIsUserLoggedIn(false)
-    } else {
-      setIsUserLoggedIn(true)
-    }
-  }, [])
 
   return (
     <div className=" border-b">
@@ -46,7 +36,7 @@ function Navbar() {
                 <Link to="/palette-generator">Palette Generator</Link>
               </Button>
             </li>
-            {!isUserLoggedIn ? (
+            {!authService.loggedIn() ? (
               <li>
                 <Button variant="primary" asChild>
                   <Link to="/auth">Login</Link>
