@@ -12,6 +12,8 @@ type Color {
     _id: ID!
     createdAt: String!
     hexCode: String!
+    name: String
+    userId: ID
     references: String
   }
 
@@ -48,9 +50,9 @@ type Mutation {
     updateUserName(id: ID!, newName: String!): User
     login(email: String!, password: String!): Auth
 
-    createColor(hexCode: String!): Color
+    createColor(hexCode: String!, name: String!, userId: ID!): Color
     deleteColor(id: ID!): Color
-    updateColor(id: ID!, hexCode: String!): Color
+    updateColor(id: ID!, hexCode: String!, name: String): Color
 
     createGradient(gradientName: String!, color: String!): Gradient!
     updateGradient(id: ID!, gradientName: String!, color: String!): Gradient!

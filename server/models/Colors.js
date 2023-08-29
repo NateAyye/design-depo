@@ -9,11 +9,21 @@ const colorSchema = new Schema(
                 return timestamp.toISOString();
             },
         },
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
         hexCode: {
             type: String,
             match: /^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/,
 
-        },    
+        },
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        }    
     },
     {
         toJSON: {
@@ -26,10 +36,11 @@ const colorSchema = new Schema(
 
 colorSchema.statics.countReferences = async function(hexCode) {
     try {
-        const palettesCount = await this.model('Palettes').countDocuments({ hexCode });
-        const gradientsCount = await this.model('Gradients').countDocuments({ hexCode });
+        // const palettesCount = await this.model('Palettes').countDocuments({ hexCode });
+        // const gradientsCount = await this.model('Gradients').countDocuments({ hexCode });
         
-        const totalCount = palettesCount + gradientsCount;
+        // const totalCount = palettesCount + gradientsCount;
+        const totalCount = 0;
         
         return `This color appears in ${totalCount} of your designs`;
     } catch (error) {

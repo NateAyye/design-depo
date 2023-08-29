@@ -1,4 +1,4 @@
-const  User  = require('../models/User');
+const User = require('../models/User');
 const Color = require('../models/Colors');
 const Gradients = require('../models/Gradients');
 const Fonts = require('../models/Fonts');
@@ -26,144 +26,144 @@ const resolvers = {
     // User Mutations 
 
     createUser: async (_, { name, email, password }) => {
-        const newUser = await User.create({ name, email, password });
-        const token = signToken(newUser);
-        return { token, newUser };
-      },
+      const newUser = await User.create({ name, email, password });
+      const token = signToken(newUser);
+      return { token, newUser };
+    },
     updateUserName: async (_, { id, newName }) => {
-        const updatedUser = await User.findByIdAndUpdate(id, { name: newName }, { new: true });
-        return updatedUser;
-      },
+      const updatedUser = await User.findByIdAndUpdate(id, { name: newName }, { new: true });
+      return updatedUser;
+    },
     deleteUser: async (_, { id }) => {
-        return User.findOneAndDelete({ _id: id });
-      },
+      return User.findOneAndDelete({ _id: id });
+    },
     login: async (_, { email, password }) => {
-        const currentUser = await User.findOne({ email });
-  
-        if (!currentUser) {
-          throw new AuthenticationError('No User with this email found!');
-        }
+      const currentUser = await User.findOne({ email });
 
-        const correctPw = await currentUser.isCorrectPassword(password);
-  
-        if (!correctPw) {
-          throw new AuthenticationError('Incorrect password!');
+      if (!currentUser) {
+        throw new AuthenticationError('No User with this email found!');
+      }
+
+      const correctPw = await currentUser.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect password!');
+      }
+
+      const token = signToken(currentUser);
+      return { token, currentUser };
+    },
+
+    // Colors Mutations
+    createColor: async (_, { hexCode, name, userId }) => {
+      const newColor = await Color.create({ hexCode, name, userId });
+      //await newColor.save();
+      return newColor;
+    },
+    deleteColor: async (_, { id }) => {
+      try {
+        const deletedColor = await Color.findByIdAndDelete(id);
+        if (!deletedColor) {
+          throw new Error('Color not found');
         }
-  
-        const token = signToken(currentUser);
-        return { token, currentUser };
-      },
-    
-      // Colors Mutations
-      createColor: async (_, { hexCode }) => {
-        const newColor = await Color.create({hexCode,});
-        //await newColor.save();
-        return newColor;
-      },
-      deleteColor: async (_, { id }) => {
-        try {
-          const deletedColor = await Color.findByIdAndDelete(id);
-          if (!deletedColor) {
-            throw new Error('Color not found');
-          }
-          return deletedColor;
-        } catch (error) {
-          throw error;
+        return deletedColor;
+      } catch (error) {
+        throw error;
+      }
+    },
+    updateColor: async (_, { id, hexCode }) => {
+      try {
+        const updatedColor = await Color.findByIdAndUpdate(
+          id,
+          { hexCode },
+          { new: true }
+        );
+        if (!updatedColor) {
+          throw new Error('Color not found');
         }
-      },
-      updateColor: async (_, { id, hexCode }) => {
-        try {
-          const updatedColor = await Color.findByIdAndUpdate(
-            id,
-            { hexCode },
-            { new: true }
-          );
-          if (!updatedColor) {
-            throw new Error('Color not found');
-          }
-          return updatedColor;
-        } catch (error) {
-          throw error;
-        }
-      },
+        return updatedColor;
+      } catch (error) {
+        throw error;
+      }
+    },
 
     // Grafient mutations
     createGradient: async (_, { gradientName, color }) => {
-        const newGradient = await Gradients.create({gradientName,color,});
-        //await newGradient.save();
-        return newGradient;
-      },
+      const newGradient = await Gradients.create({ gradientName, color, });
+      //await newGradient.save();
+      return newGradient;
+    },
     updateGradient: async (_, { id, gradientName, color }) => {
-        try {
-          const updatedGradient = await Gradients.findByIdAndUpdate(
-            id,
-            { gradientName, color },
-            { new: true }
-          );
-          if (!updatedGradient) {
-            throw new Error('Gradient not found');
-          }
-          return updatedGradient;
-        } catch (error) {
-          throw error;
+      try {
+        const updatedGradient = await Gradients.findByIdAndUpdate(
+          id,
+          { gradientName, color },
+          { new: true }
+        );
+        if (!updatedGradient) {
+          throw new Error('Gradient not found');
         }
-      },
+        return updatedGradient;
+      } catch (error) {
+        throw error;
+      }
+    },
     deleteGradient: async (_, { id }) => {
-        try {
-          const deletedGradient = await Gradients.findByIdAndDelete(id);
-          if (!deletedGradient) {
-            throw new Error('Gradient not found');
-          }
-          return deletedGradient;
-        } catch (error) {
-          throw error;
+      try {
+        const deletedGradient = await Gradients.findByIdAndDelete(id);
+        if (!deletedGradient) {
+          throw new Error('Gradient not found');
         }
-      },
+        return deletedGradient;
+      } catch (error) {
+        throw error;
+      }
+    },
     createFont: async (_, { activeFontFamily }) => {
-        const newFont = await Fonts.create({
-          activeFontFamily,
-        });
-        //await newFont.save();
-        return newFont;
-      },
+      const newFont = await Fonts.create({
+        activeFontFamily,
+      });
+      //await newFont.save();
+      return newFont;
+    },
     deleteFont: async (_, { id }) => {
-        try {
-          const deletedFont = await Fonts.findByIdAndDelete(id);
-          if (!deletedFont) {
-            throw new Error('Font not found');
-          }
-          return deletedFont;
-        } catch (error) {
-          throw error;
+      try {
+        const deletedFont = await Fonts.findByIdAndDelete(id);
+        if (!deletedFont) {
+          throw new Error('Font not found');
         }
-      },  
+        return deletedFont;
+      } catch (error) {
+        throw error;
+      }
+    },
     updateFont: async (_, { id, activeFontFamily }) => {
-        try {
-          const updatedFont = await Fonts.findByIdAndUpdate(
-            id,
-            { activeFontFamily },
-            { new: true }
-          );
-          if (!updatedFont) {
-            throw new Error('Font not found');
-          }
-          return updatedFont;
-        } catch (error) {
-          throw error;
+      try {
+        const updatedFont = await Fonts.findByIdAndUpdate(
+          id,
+          { activeFontFamily },
+          { new: true }
+        );
+        if (!updatedFont) {
+          throw new Error('Font not found');
         }
-      },
+        return updatedFont;
+      } catch (error) {
+        throw error;
+      }
+    },
 
+  },
+  Color: {
+    references: async (parent) => {
+      try {
+        const countMessage = await Color.countReferences(parent.hexCode);
+        return countMessage;
+      } catch (error) {
+        throw error;
+      }
     },
-    Color: {
-      references: async (parent) => {
-        try {
-          const countMessage = await Color.countReferences(parent.hexCode);
-          return countMessage;
-        } catch (error) {
-          throw error;
-        }
-      },
-    },
+  },
 
 };
 
