@@ -9,6 +9,8 @@ const Fonts =require('../models/Fonts');
 const fontSeeds = require('./fontSeeds.json');
 const Palette = require('../models/Palettes');
 const paletteSeeds = require('./paletteSeeds.json');
+const Project = require ('../models/Projects');
+const projectSeeds = require('./projectSeeds.json');
 
 db.once('open', async () => {
   try {
@@ -22,7 +24,8 @@ db.once('open', async () => {
     await Fonts.create(fontSeeds);
     await Palette.deleteMany({});
     await Palette.create(paletteSeeds);
-
+    await Project.deleteMany({});
+    await Project.create(projectSeeds);
 
     console.log('all done!');
     process.exit(0);

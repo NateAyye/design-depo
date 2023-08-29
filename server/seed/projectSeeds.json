@@ -1,0 +1,20 @@
+
+[
+    {
+      "userName": "64ee4d968c915edba8417103",
+      "projectName": "Project 1",
+      "palettes": ["64ed742316b0c4b993281638", "64ed742316b0c4b993281639"],
+      "gradients": ["64ed742316b0c4b993281626", "64ed742316b0c4b993281628"],
+      "colors": ["64ed742316b0c4b993281613", "64ed742316b0c4b993281614"],
+      "fonts": ["64ed742316b0c4b99328162d", "64ed742316b0c4b99328162e"]
+    },
+    {
+      "userName": "64ee4d968c915edba8417105",
+      "projectName": "Project 2",
+      "palettes": ["64ed742316b0c4b993281639", "64ed742316b0c4b99328163a"],
+      "gradients": ["64ed742316b0c4b993281628", "64ed742316b0c4b993281627"],
+      "colors": ["64ed742316b0c4b993281615", "64ed742316b0c4b993281616"],
+      "fonts": ["64ed742316b0c4b99328162f", "64ed742316b0c4b993281630"]
+    }
+  ]
+  
