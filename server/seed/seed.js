@@ -14,18 +14,18 @@ const projectSeeds = require('./projectSeeds.json');
 
 db.once('open', async () => {
   try {
-    // await User.deleteMany({});
-    // await User.create(userSeeds);
-    // await Color.deleteMany({});
-    // await Color.create(colorSeeds);
-    // await Gradient.deleteMany({});
-    // await Gradient.create(gradientSeeds);
-    // await Fonts.deleteMany({});
-    // await Fonts.create(fontSeeds);
-    // await Palette.deleteMany({});
-    // await Palette.create(paletteSeeds);
-     await Project.deleteMany({});
-     await Project.create(projectSeeds);
+    await User.deleteMany({});
+    await User.create(userSeeds);
+    await Color.deleteMany({});
+    await Color.create(colorSeeds);
+    await Gradient.deleteMany({});
+    await Gradient.create(gradientSeeds);
+    await Fonts.deleteMany({});
+    await Fonts.create(fontSeeds);
+    await Palette.deleteMany({});
+    await Palette.create(paletteSeeds);
+    await Project.deleteMany({});
+    await Project.create(projectSeeds);
 
     console.log('all done!');
     process.exit(0);
