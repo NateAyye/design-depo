@@ -1,8 +1,10 @@
+import { Navigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip";
 import { DASHBOARD_TABS } from "../../config/constants";
 import { useAppContext } from "../../context/AppState";
 import { SET_TAB } from "../../context/AppState/actions";
+import authService from "../../lib/auth";
 import { cn, properCase } from "../../lib/utils";
 import ColorsTab from "./Tabs/ColorsTab";
 import FontsTab from "./Tabs/FontsTab";
@@ -12,7 +14,9 @@ import PalettesTab from "./Tabs/PalettesTab";
 function Dashboard() {
   const [appState, appDispatch] = useAppContext();
 
-  return (
+  return authService.isTokenExpired(authService.getToken()) || !authService.loggedIn() ? (
+    <Navigate to="/" replace />
+  ) : (
     <div className="flex-1 flex items-stretch justify-stretch">
       <Tabs
         className="w-full flex"

@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { generateRandomColor, getColorName, hexToRgb } from "../../lib/colors";
 import { useAppContext } from "../AppState";
@@ -15,34 +15,30 @@ const ColorPickerProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useColorsReducer({
     colorName: '',
     hexValue: color,
-    hslValue: { h: 0, s: 0, l: 0, a: 1 },
     rgbValue: hexToRgb(color),
-    displayModalPicker: false,
   });
 
-  const resetColor = useCallback(async (colorVal) => {
-    dispatch({ type: SET_HEX, payload: colorVal })
-    dispatch({ type: SET_RGB, payload: hexToRgb(colorVal) })
-    dispatch({ type: SET_COLOR_NAME, payload: await getColorName(colorVal) })
-  }, [dispatch])
-
-  const onKeyDown = useCallback(async (e) => {
-    if (appState.isModalOpen) return;
-    if (e.code === 'Space' && e.ctrlKey) {
-      e.preventDefault();
-      const randomColor = generateRandomColor();
-      await resetColor(randomColor);
-    }
-  }, [appState.isModalOpen, resetColor])
-
-
   useEffect(() => {
+    const resetColor = async (colorVal) => {
+      dispatch({ type: SET_HEX, payload: colorVal })
+      dispatch({ type: SET_RGB, payload: hexToRgb(colorVal) })
+      dispatch({ type: SET_COLOR_NAME, payload: await getColorName(colorVal) })
+    }
+
+    const onKeyDown = async (e) => {
+      if (appState.isModalOpen) return;
+      if (e.code === 'Space' && e.ctrlKey) {
+        e.preventDefault();
+        const randomColor = generateRandomColor();
+        await resetColor(randomColor);
+      }
+    }
     resetColor(color);
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
     }
-  }, [onKeyDown, resetColor]) // eslint-disable-line
+  }, []) // eslint-disable-line
   // ^^^^^^^ DO NOT TOUCH DEPENDANCY ARRAY PLEASE ^^^^^^
 
   return <Provider value={[state, dispatch]} {...props} />;

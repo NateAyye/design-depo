@@ -1,5 +1,4 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import LoginForm from "../components/auth/login-form"
 import SignUpForm from "../components/auth/signup-form"
 import {
@@ -8,18 +7,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs"
-import AuthService from '../lib/auth'
+import authService from "../lib/auth"
 
 function Auth() {
-  const navigate = useNavigate()
 
-  if (AuthService.loggedIn()) {
-    navigate('/', { replace: true })
-  }
-  useEffect(() => {
-  })
-
-  return (
+  return authService.loggedIn() ? (
+    <Navigate to="/" replace />
+  ) : (
     <div className="container min-h-[90vh] flex justify-center items-center">
       <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">

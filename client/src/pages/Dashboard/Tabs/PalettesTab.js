@@ -1,30 +1,20 @@
 import { PlusIcon } from "@radix-ui/react-icons"
 import { createSearchParams, useNavigate } from "react-router-dom"
+import ColorVariantButton from "../../../components/color-variant-btn"
 import AddPaletteDialog from "../../../components/dialogs/add-palette-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
 import TabTitle from "../../../components/tab-title"
 import { Button } from "../../../components/ui/button"
 import { DropdownMenuItem } from "../../../components/ui/dropdown-menu"
-import { useToast } from "../../../components/ui/use-toast"
 import { useAppContext } from "../../../context/AppState"
 import { ADD_PALETTE } from "../../../context/AppState/actions"
-import { getTextColor } from "../../../lib/colors"
+import { useCopy } from "../../../hooks/useCopy"
 
 function PalettesTab() {
   const [appState, appDispatch] = useAppContext()
   const navigate = useNavigate()
-  const { toast } = useToast()
-
-  function CopyAndAlert(palette) {
-    navigator.clipboard.writeText(palette);
-    // Alert the copied text
-    toast({
-      title: `Copied ${ palette } to clipboard.`,
-      description: 'Copied color to clipboard.',
-      variant: 'success'
-    })
-  }
+  const { CopyAndAlert } = useCopy()
 
   return (
     <div>
@@ -32,9 +22,7 @@ function PalettesTab() {
       <ItemGrid>
 
         <AddPaletteDialog
-          onSubmit={(values) => {
-            appDispatch({ type: ADD_PALETTE, payload: values })
-          }}
+          onSubmit={(values) => appDispatch({ type: ADD_PALETTE, payload: values })}
           triggerElement={() => (
             <Button className="p-0 m-0 flex-1 flex flex-col justify-center items-center w-full max-w-full focus-visible:ring-foreground focus-visible:border-2 flex-center rounded-md h-24 bg-foreground">
               <PlusIcon className="w-10 h-10 text-background font-bold" scale={3} />
@@ -48,25 +36,19 @@ function PalettesTab() {
             title={palette.name}
             menuContent={
               <>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={(e) => {
                     e.stopPropagation()
-                    const path = '/palette-generator'
-                    const serarchParams = createSearchParams({
+                    const url = window.location.origin + '/palette-generator?' + createSearchParams({
                       palette: palette.colors.map((color) => color.replace('#', '')).join('-'),
                     }).toString()
-                    const url = window.location.origin + path + '?' + serarchParams
-                    navigator.clipboard.writeText(url);
-                    // Alert the copied text
-                    toast({
-                      title: `Copied ${ url } to clipboard.`,
-                      description: 'Copied URL to clipboard.',
-                      variant: 'success'
-                    })
+                    CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard.`, description: '' })
                   }}
                 >
                   Copy URL
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  Edit Palette
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
@@ -85,19 +67,7 @@ function PalettesTab() {
             }
           >
             <div className="flex h-full overflow-hidden flex-1 rounded-lg shadow-md relative" >
-              {palette.colors.map((color) => (
-                <div
-                  key={color}
-                  style={{ backgroundColor: color }}
-                  role="button"
-                  tabIndex={0}
-                  className="group/palette flex justify-center items-center flex-1 hover:flex-[2] focus-visible:flex-[2]"
-                  onKeyDown={(e) => CopyAndAlert(color)}
-                  onClick={(e) => CopyAndAlert(color)}
-                >
-                  <span style={{ color: getTextColor(color) }} className="font-bold font-segoe sr-only group-hover/palette:not-sr-only" >{color}</span>
-                </div>
-              ))}
+              {palette.colors.map((color) => <ColorVariantButton key={color} currentColor={color} />)}
             </div>
           </ItemContainer>
         ))}

@@ -15,12 +15,12 @@ export const reducer = (state, action) => {
     case REMOVE_COLOR:
       return {
         ...state,
-        colors: state.colors.filter(c => c.id !== action.payload)
+        colors: state.colors.filter(c => c._id !== action.payload)
       };
     case UPDATE_COLOR:
       return {
         ...state,
-        colors: state.colors.map(c => c.id === action.payload.id ? action.payload : c)
+        colors: state.colors.map(c => c.id === action.payload._id ? action.payload : c)
       };
     case SET_COLORS:
       return {
