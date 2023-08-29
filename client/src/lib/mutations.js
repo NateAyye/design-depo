@@ -60,3 +60,12 @@ mutation UpdateColor($updateColorId: ID!, $hexCode: String!) {
     }
   }
 `;
+export const UPDATE_USERNAME = gql`
+mutation Mutation($updateUserNameId: ID!, $newName: String!) {
+    updateUserName(id: $updateUserNameId, newName: $newName) {
+      _id
+      email
+      name
+    }
+  }
+`;
