@@ -25,6 +25,8 @@ type Query {
     User(UserId: ID!): User
     Colors: [Color]!
     Color(id: ID!): Color
+    Gradients: [Color]!
+    Gradient(id: ID!): Color
   }
 
 type Mutation {

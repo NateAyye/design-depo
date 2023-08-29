@@ -1,5 +1,6 @@
 const  User  = require('../models/User');
 const Color = require('../models/Colors');
+const Gradients = require('../models/Gradients');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -11,14 +12,18 @@ const resolvers = {
     // Color Queries
     Colors: async () => await Color.find(), // get all Colors
     Color: async (_, { id }) => await Color.findById(id), // get Color by id
+
+    // Gradients Queries
+    Gradients: async () => await Gradients.find(), // Get all gradients
+    Gradient: async (_, { id }) => await Gradients.findById(id), // Get gradient by ID
   },
   Mutation: {
     // User Mutations 
 
     createUser: async (_, { name, email, password }) => {
-        const User = await User.create({ name, email, password });
-        const token = signToken(User);
-        return { token, User };
+        const newUser = await User.create({ name, email, password });
+        const token = signToken(newUser);
+        return { token, newUser };
       },
     updateUserName: async (_, { id, newName }) => {
         const updatedUser = await User.findByIdAndUpdate(id, { name: newName }, { new: true });
@@ -28,26 +33,26 @@ const resolvers = {
         return User.findOneAndDelete({ _id: id });
       },
     login: async (_, { email, password }) => {
-        const User = await User.findOne({ email });
+        const currentUser = await User.findOne({ email });
   
-        if (!User) {
+        if (!currentUser) {
           throw new AuthenticationError('No User with this email found!');
         }
 
-        const correctPw = await User.isCorrectPassword(password);
+        const correctPw = await currentUser.isCorrectPassword(password);
   
         if (!correctPw) {
           throw new AuthenticationError('Incorrect password!');
         }
   
-        const token = signToken(User);
-        return { token, User };
+        const token = signToken(currentUser);
+        return { token, currentUser };
       },
     
       // Colors Mutations
       createColor: async (_, { hexCode }) => {
         const newColor = await Color.create({hexCode,});
-        await newColor.save();
+        //await newColor.save();
         return newColor;
       },
       deleteColor: async (_, { id }) => {
