@@ -16,11 +16,11 @@ function PalettesTab() {
   const navigate = useNavigate()
   const { toast } = useToast()
 
-  function CopyAndAlert(gradient) {
-    navigator.clipboard.writeText(gradient);
+  function CopyAndAlert(palette) {
+    navigator.clipboard.writeText(palette);
     // Alert the copied text
     toast({
-      title: `Copied ${ gradient } to clipboard.`,
+      title: `Copied ${ palette } to clipboard.`,
       description: 'Copied color to clipboard.',
       variant: 'success'
     })
