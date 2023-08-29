@@ -38,3 +38,14 @@ export const DELETE_USER = gql`
         }
     }
 `;
+
+export const DELETE_COLOR = gql`
+mutation Mutation($deleteColorId: ID!) {
+    deleteColor(id: $deleteColorId) {
+      _id
+      createdAt
+      hexCode
+      references
+    }
+  }
+`;
