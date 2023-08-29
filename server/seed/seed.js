@@ -7,6 +7,8 @@ const Gradient =require('../models/Gradients');
 const gradientSeeds = require('./gradientsSeeds.json');
 const Fonts =require('../models/Fonts');
 const fontSeeds = require('./fontSeeds.json');
+const Palette = require('../models/Palettes');
+const paletteSeeds = require('./paletteSeeds.json');
 
 db.once('open', async () => {
   try {
@@ -18,6 +20,8 @@ db.once('open', async () => {
     await Gradient.create(gradientSeeds);
     await Fonts.deleteMany({});
     await Fonts.create(fontSeeds);
+    await Palette.deleteMany({});
+    await Palette.create(paletteSeeds);
 
 
     console.log('all done!');
