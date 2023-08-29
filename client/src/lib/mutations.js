@@ -69,3 +69,7 @@ mutation Mutation($updateUserNameId: ID!, $newName: String!) {
     }
   }
 `;
+
+export const ADD_GRADIENT = gql`
+
+`;
