@@ -80,6 +80,37 @@ const resolvers = {
         } catch (error) {
           throw error;
         }
+      },
+    createGradient: async (_, { gradientName, color }) => {
+        const newGradient = await Gradients.create({gradientName,color,});
+        //await newGradient.save();
+        return newGradient;
+      },
+    updateGradient: async (_, { id, gradientName, color }) => {
+        try {
+          const updatedGradient = await Gradients.findByIdAndUpdate(
+            id,
+            { gradientName, color },
+            { new: true }
+          );
+          if (!updatedGradient) {
+            throw new Error('Gradient not found');
+          }
+          return updatedGradient;
+        } catch (error) {
+          throw error;
+        }
+      },
+    deleteGradient: async (_, { id }) => {
+        try {
+          const deletedGradient = await Gradients.findByIdAndDelete(id);
+          if (!deletedGradient) {
+            throw new Error('Gradient not found');
+          }
+          return deletedGradient;
+        } catch (error) {
+          throw error;
+        }
       },        
     },
     Color: {
