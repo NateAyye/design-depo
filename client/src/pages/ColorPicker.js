@@ -63,7 +63,7 @@ function ColorPicker() {
       <section className="container mx-auto my-10 flex flex-col gap-2 justify-center items-center">
         <h1 className="text-3xl font-bold">Color Picker</h1>
         <p className="text-xl font-bold max-w-lg text-center">Get useful color information like conversion, combinations, blindness simulation and more.</p>
-        <small className="text-foreground/80">ShortCut: (press the Spacebar to generate a random color)</small>
+        <small className="text-foreground/80">ShortCut: (press <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">CTRL</kbd> + <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">Spacebar</kbd> to generate a random color)</small>
       </section>
       <section className="container px-10 my-5 flex justify-end items-center ">
         <div className="flex flex-row-reverse p-1 gap-3 border rounded-sm flex-1">
@@ -248,10 +248,18 @@ function ColorPicker() {
                         CopyAndAlert(variant.toString(appState.colorFormat));
                       }}
                     >
-                      <span className={` ${ variant.toString('hex') === color.toString('hex') ? 'visible' : 'invisible' }`} style={{ color: getTextColor(color.toString(appState.colorFormat)) }}>
+                      <span
+                        className={` ${ variant.toString('hex') === color.toString('hex') ? 'visible' : 'invisible' }`}
+                        style={{ color: getTextColor(color.toString(appState.colorFormat)) }}
+                      >
                         <DotFilledIcon className="w-8 h-8" />
                       </span>
-                      <span className="hidden group-hover:flex group-focus-visible:flex" style={{ color: getTextColor(color.toString(appState.colorFormat)) }}>{color.toString(appState.colorFormat)}</span>
+                      <span
+                        className="hidden group-hover:flex group-focus-visible:flex"
+                        style={{ color: getTextColor(variant.toString(appState.colorFormat)) }}
+                      >
+                        {variant.toString(appState.colorFormat)}
+                      </span>
                     </div>
                   )
                 })}

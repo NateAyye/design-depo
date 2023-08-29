@@ -13,6 +13,7 @@ export const FontPicker = () => {
           setActiveFontFamily(nextFont.family)
         }
       />
+      <p className="apply-font">The font will be applied to this text.</p>
     </div>
   );
 };
