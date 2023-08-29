@@ -47,7 +47,7 @@ const resolvers = {
       // Colors Mutations
       createColor: async (_, { hexCode }) => {
         const newColor = await Color.create({hexCode,});
-        //await newColor.save();
+        await newColor.save();
         return newColor;
       },
       deleteColor: async (_, { id }) => {
@@ -87,6 +87,7 @@ const resolvers = {
         }
       },
     },
+
 };
 
 module.exports = resolvers;
