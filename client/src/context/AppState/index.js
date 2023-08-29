@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
-import { useAppReducer } from './reducers'
-import { INITIAL_COLORS, INITIAL_PALETTES } from "../../config/constants";
+import { INITIAL_PALETTES } from "../../config/constants";
+import { useAppReducer } from './reducers';
 
 const AppContext = createContext();
 const { Provider } = AppContext;
@@ -8,7 +8,7 @@ const { Provider } = AppContext;
 const AppProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useAppReducer({
     palettes: INITIAL_PALETTES,
-    colors: INITIAL_COLORS,
+    colors: [],
     gradients: [],
     fonts: [],
     projects: [],
@@ -18,6 +18,7 @@ const AppProvider = ({ value = [], ...props }) => {
     activeDashboardTab: localStorage.getItem('activeDashboardTab') || 'palettes',
   });
 
+
   return <Provider value={[state, dispatch]} {...props} />;
 };
 
@@ -26,3 +27,4 @@ const useAppContext = () => {
 };
 
 export { AppProvider, useAppContext };
+
