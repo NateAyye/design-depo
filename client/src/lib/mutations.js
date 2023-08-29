@@ -12,18 +12,26 @@ mutation createColor($hexCode: String!) {
 `;
 
 export const CREATE_USER = gql`
-mutation createUser($name: String!, $email: String!, $password: String!) {
+mutation CreateUser($name: String!, $email: String!, $password: String!) {
     createUser(name: $name, email: $email, password: $password) {
-      
+      User {
+        _id
+        email
+        name
+        password
+      }
     }
   }
 `;
 export const LOGIN_USER = gql`
-mutation loginUser($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
+mutation User($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       token
       User {
-        
+        _id
+        email
+        name
+        password
       }
     }
   }
