@@ -69,7 +69,7 @@ function AddColorDialog({ toastAction = false, triggerElement, hex, rgb, name, s
       })
       setOpen(false);
     } catch (error) {
-      setError(error?.response?.data?.message || 'Something went wrong.');
+      setError(error?.response?.data?.message || error?.message || 'Something went wrong.');
       setTimeout(() => {
         setError(null);
       }, 10000);

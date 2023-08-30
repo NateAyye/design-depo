@@ -30,7 +30,6 @@ export const reducer = (state, action) => {
 
     case ADD_PALETTE:
       const newPalette = {
-        id: state.palettes[state.palettes?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -40,12 +39,12 @@ export const reducer = (state, action) => {
     case REMOVE_PALETTE:
       return {
         ...state,
-        palettes: state.palettes.filter(p => p.id !== action.payload)
+        palettes: state.palettes.filter(p => p._id !== action.payload)
       };
     case UPDATE_PALETTE:
       return {
         ...state,
-        palettes: state.palettes.map(p => p.id === action.payload.id ? action.payload : p)
+        palettes: state.palettes.map(p => p._id === action.payload._id ? action.payload : p)
       };
     case SET_PALETTES:
       return {

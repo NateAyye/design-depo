@@ -20,6 +20,22 @@ query Query {
     }
   }
 `;
+export const QUERY_ALL_PALETTES = gql`
+query Palettes {
+  Palettes {
+    _id
+    userId
+    paletteName
+    createdAt
+    color1
+    color2
+    color3
+    color4
+    color5
+    colors
+  }
+}
+`;
 
 export const QUERY_GRADIENT = gql`
 query Gradient($gradientId: ID!) {
