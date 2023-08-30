@@ -104,7 +104,7 @@ const LoginForm = () => {
           )}
         />
         <Button className="w-full" type="submit">
-          Sign Up
+          Login
         </Button>
       </form>
       {error && (

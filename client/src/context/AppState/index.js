@@ -1,5 +1,6 @@
-import React, { createContext, useContext } from "react";
-import { INITIAL_PALETTES } from "../../config/constants";
+import React, { createContext, useContext, useEffect } from "react";
+import authService from "../../lib/auth";
+import { USER_LOGGED_IN } from "./actions";
 import { useAppReducer } from './reducers';
 
 const AppContext = createContext();
@@ -7,17 +8,21 @@ const { Provider } = AppContext;
 
 const AppProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useAppReducer({
-    palettes: INITIAL_PALETTES,
+    palettes: [],
     colors: [],
     gradients: [],
     fonts: [],
     projects: [],
     colorFormat: 'hex6',
     isModalOpen: false,
+    logged_in: false,
     jwt: '',
     activeDashboardTab: localStorage.getItem('activeDashboardTab') || 'palettes',
   });
 
+  useEffect(() => {
+    dispatch({ type: USER_LOGGED_IN, payload: authService.loggedIn() })
+  }, [dispatch])
 
   return <Provider value={[state, dispatch]} {...props} />;
 };

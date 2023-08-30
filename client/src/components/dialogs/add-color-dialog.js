@@ -23,7 +23,7 @@ const formSchema = z.object({
   color: z.string()
 })
 
-function AddColorDialog({ toastAction = false, triggerElement, hex, rgb, name, setName, setHex, setRgb }) {
+function AddColorDialog({ toastAction = false, triggerElement, hex, rgb, name, setName, setHex, setRgb  }) {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
@@ -69,7 +69,7 @@ function AddColorDialog({ toastAction = false, triggerElement, hex, rgb, name, s
       })
       setOpen(false);
     } catch (error) {
-      setError(error?.response?.data?.message || 'Something went wrong.');
+      setError(error?.response?.data?.message || error?.message || 'Something went wrong.');
       setTimeout(() => {
         setError(null);
       }, 10000);

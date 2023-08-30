@@ -9,7 +9,7 @@ const paletteSchema = new Schema(
             minlength: 5,
             maxlength: 60,
         },
-            createdAt: {
+        createdAt: {
             type: Date,
             default: Date.now,
             get: (timestamp) => {
@@ -41,16 +41,21 @@ const paletteSchema = new Schema(
             required: true,
             match: /^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/,
         },
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        }
     },
     {
         toJSON: {
             virtuals: true,
             getters: true,
-          },
-          id: true,  
+        },
+        id: true,
     }
 );
-paletteSchema.virtual('colors').get(function() {
+paletteSchema.virtual('colors').get(function () {
     return [this.color1, this.color2, this.color3, this.color4, this.color5];
 });
 

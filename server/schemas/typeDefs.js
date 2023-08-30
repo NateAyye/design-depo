@@ -19,6 +19,7 @@ type Color {
 
 type Gradient {
     _id: ID!
+    userId: ID
     gradientName: String!
     color: String!
     createdAt: String!
@@ -31,6 +32,7 @@ type Font {
 
 type Palette {
     _id: ID!
+    userId: ID
     paletteName: String!
     createdAt: String!
     color1: String!
@@ -86,7 +88,7 @@ type Mutation {
     deleteColor(id: ID!): Color
     updateColor(id: ID!, hexCode: String!, name: String): Color
 
-    createGradient(gradientName: String!, color: String!): Gradient!
+    createGradient(gradientName: String!, userId: ID!, color: String!): Gradient!
     updateGradient(id: ID!, gradientName: String!, color: String!): Gradient!
     deleteGradient(id: ID!): Gradient!
 
@@ -95,6 +97,7 @@ type Mutation {
     updateFont(id: ID!, activeFontFamily: String!): Font
 
     createPalette(
+      userId: ID!
       paletteName: String!
       color1: String!
       color2: String!

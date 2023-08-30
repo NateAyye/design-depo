@@ -1,8 +1,13 @@
 import { useReducer } from "react";
-import { ADD_COLOR, ADD_FONT, ADD_GRADIENT, ADD_PALETTE, ADD_PROJECT, REMOVE_COLOR, REMOVE_FONT, REMOVE_GRADIENT, REMOVE_JWT, REMOVE_PALETTE, REMOVE_PROJECT, SET_COLORS, SET_COLOR_FORMAT, SET_FONTS, SET_GRADIENTS, SET_JWT, SET_MODAL_OPEN, SET_PALETTES, SET_PROJECTS, SET_TAB, UPDATE_COLOR, UPDATE_FONT, UPDATE_GRADIENT, UPDATE_PALETTE, UPDATE_PROJECT } from "./actions";
+import { ADD_COLOR, ADD_FONT, ADD_GRADIENT, ADD_PALETTE, ADD_PROJECT, REMOVE_COLOR, REMOVE_FONT, REMOVE_GRADIENT, REMOVE_JWT, REMOVE_PALETTE, REMOVE_PROJECT, SET_COLORS, SET_COLOR_FORMAT, SET_FONTS, SET_GRADIENTS, SET_JWT, SET_MODAL_OPEN, SET_PALETTES, SET_PROJECTS, SET_TAB, UPDATE_COLOR, UPDATE_FONT, UPDATE_GRADIENT, UPDATE_PALETTE, UPDATE_PROJECT, USER_LOGGED_IN } from "./actions";
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case USER_LOGGED_IN:
+      return {
+        ...state,
+        logged_in: action.payload
+      };
     case ADD_COLOR:
       const newColor = {
         id: state.colors[state.colors?.length - 1]?.id + 1 || 1,
@@ -30,7 +35,6 @@ export const reducer = (state, action) => {
 
     case ADD_PALETTE:
       const newPalette = {
-        id: state.palettes[state.palettes?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -40,12 +44,12 @@ export const reducer = (state, action) => {
     case REMOVE_PALETTE:
       return {
         ...state,
-        palettes: state.palettes.filter(p => p.id !== action.payload)
+        palettes: state.palettes.filter(p => p._id !== action.payload)
       };
     case UPDATE_PALETTE:
       return {
         ...state,
-        palettes: state.palettes.map(p => p.id === action.payload.id ? action.payload : p)
+        palettes: state.palettes.map(p => p._id === action.payload._id ? action.payload : p)
       };
     case SET_PALETTES:
       return {

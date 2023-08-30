@@ -11,6 +11,33 @@ mutation createColor($hexCode: String!, $name: String!, $userId: ID!) {
   }
 }
 `;
+export const CREATE_PALETTE = gql`
+mutation CreatePalette($userId: ID!, $paletteName: String!, $color1: String!, $color2: String!, $color3: String!, $color4: String!, $color5: String!) {
+  createPalette(userId: $userId, paletteName: $paletteName, color1: $color1, color2: $color2, color3: $color3, color4: $color4, color5: $color5) {
+    _id
+    userId
+    paletteName
+    createdAt
+    colors
+    color1
+    color2
+    color3
+    color4
+    color5
+  }
+}
+`;
+export const DELETE_PALETTE = gql`
+mutation Mutation($paletteId: ID!) {
+    deletePalette(id: $paletteId) {
+      _id
+      userId
+      paletteName
+      createdAt
+      colors
+    }
+  }
+`;
 
 export const CREATE_USER = gql`
 mutation CreateUser($name: String!, $email: String!, $password: String!) {
@@ -79,13 +106,14 @@ mutation Mutation($updateUserNameId: ID!, $newName: String!) {
   }
 `;
 
-export const ADD_GRADIENT = gql`
-mutation CreateGradient($gradientName: String!, $color: String!) {
-    createGradient(gradientName: $gradientName, color: $color) {
+export const CREATE_GRADIENT = gql`
+mutation CreateGradient($gradientName: String!, $color: String!, $userId: ID!) {
+    createGradient(gradientName: $gradientName, color: $color, userId: $userId) {
       _id
+      userId
+      gradientName
       color
       createdAt
-      gradientName
     }
   }
 `;
@@ -95,6 +123,7 @@ mutation DeleteGradient($deleteGradientId: ID!) {
     deleteGradient(id: $deleteGradientId) {
       _id
       color
+      userId
       createdAt
       gradientName
     }
