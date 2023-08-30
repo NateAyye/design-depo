@@ -1,14 +1,21 @@
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HeartIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import ColorPicker from 'react-best-gradient-color-picker';
 import { useColorPicker } from "react-best-gradient-color-picker/lib/hooks/useColorPicker";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import * as z from "zod";
+import { useAppContext } from "../../context/AppState";
+import { ADD_GRADIENT, SET_TAB } from "../../context/AppState/actions";
+import authService from "../../lib/auth";
+import { CREATE_GRADIENT } from "../../lib/mutations";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
@@ -16,10 +23,13 @@ const formSchema = z.object({
   color: z.string()
 })
 
-function AddGradientDialog({ onSubmit, triggerElement, name, setName, color, setColor }) {
+function AddGradientDialog({ triggerElement, name, setName, color, setColor, toastAction = false }) {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [, appDispatch] = useAppContext()
+  const [createGradient] = useMutation(CREATE_GRADIENT);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const navigate = useNavigate();
   const { setGradient } = useColorPicker(color, setColor);
   const { toast } = useToast();
   const form = useForm({
@@ -42,21 +52,31 @@ function AddGradientDialog({ onSubmit, triggerElement, name, setName, color, set
 
 
 
-  function onFormSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onFormSubmit(values) {
     const gradientValues = {
-      name: values.name,
-      color: color
+      gradientName: values.name,
+      color: color,
+      userId: authService.getProfile().data._id
     }
-    if (onSubmit) onSubmit(gradientValues);
     try {
-      // TODO: Add color to database
-      // const res = await api.post('/login', data);
-      // navigate('/')
+      const mutationResponse = await createGradient({ variables: gradientValues })
+      const gradient = mutationResponse.data;
+      appDispatch({ type: ADD_GRADIENT, payload: gradient.createGradient })
       toast({
         title: `Success: ${ values.name }`,
         description: 'Gradient saved successfully.',
+        action: !toastAction ? null : (
+          <ToastAction
+            onClick={() => {
+              appDispatch({ type: SET_TAB, payload: 'gradients' })
+              localStorage.setItem('activeDashboardTab', 'gradients')
+              navigate('/dashboard')
+            }}
+            altText="Go to Gradients Tab"
+          >
+            View
+          </ToastAction>
+        ),
         variant: 'success'
       })
       setOpen(false);
@@ -142,11 +162,8 @@ function AddGradientDialog({ onSubmit, triggerElement, name, setName, color, set
                           background: `${ color }`,
                         }} />
                       </div>
-                      {displayColorPicker ? <div className="absolute left-[110%] bottom-0 translate-y-1/2 bg-white p-2 z-10">
-                        <div className="fixed inset-0" onClick={() => {
-                          // setDisplayColorPicker(false)
-                        }} />
-                        <ColorPicker value={color} onChange={setColor} />
+                      {displayColorPicker ? <div className="absolute left-1/2 -translate-x-1/2 -bottom-10 w-fit lg:left-full lg:-translate-x-0 lg:bottom-0 lg:translate-y-1/2 bg-white p-2 z-10">
+                        <ColorPicker hidePresets height={150} width={300} value={color} onChange={setColor} />
                       </div> : null}
                     </div>
                   </FormControl>
