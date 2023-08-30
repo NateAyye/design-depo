@@ -1,14 +1,13 @@
-import { CopyIcon, HeartIcon, Share1Icon, UpdateIcon } from "@radix-ui/react-icons";
+import { CopyIcon, Share1Icon, UpdateIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import tinycolor from "tinycolor2";
+import AddColorDialog from "../components/dialogs/add-color-dialog";
 import AddPaletteDialog from "../components/dialogs/add-palette-dialog";
 import ItemContainer from "../components/item-container";
 import { Button } from "../components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
 import { useToast } from "../components/ui/use-toast";
-import { useAppContext } from "../context/AppState";
-import { ADD_COLOR } from "../context/AppState/actions";
 import { useCopy } from "../hooks/useCopy";
 import { generateRandomColor } from "../lib/colors";
 
@@ -25,7 +24,6 @@ function generateRandomPalette(color) {
 function PaletteGenerator() {
   const [searchParams] = useSearchParams();
   const randomPalette = generateRandomPalette(generateRandomColor());
-  const [, appDispatch] = useAppContext()
   const palette = formatPalette(searchParams.get('palette')) || randomPalette;
   const [paletteState, setPaletteState] = useState(palette);
   const { toast } = useToast()
@@ -120,9 +118,11 @@ function PaletteGenerator() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button onClick={() => CopyAndAlert({ content: color })} variant='ghost'>
+                    <div className="w-full flex justify-center">
+                    <Button  className='h-9 w-9 p-0' onClick={() => CopyAndAlert({ content: color })} variant='ghost'>
                       <CopyIcon />
                     </Button>
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Copy</p>
@@ -132,20 +132,23 @@ function PaletteGenerator() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      variant='ghost'
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setPaletteState(prev => {
-                          const newPalette = [...prev]
-                          newPalette[paletteState.findIndex(c => c === color)] = generateRandomColor()
-                          return newPalette
-                        })
+                    <div className="w-full flex justify-center">
+                      <Button
+                        variant='ghost'
+                        className='h-9 w-9 p-0'
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setPaletteState(prev => {
+                            const newPalette = [...prev]
+                            newPalette[paletteState.findIndex(c => c === color)] = generateRandomColor()
+                            return newPalette
+                          })
 
-                      }}
-                    >
-                      <UpdateIcon />
-                    </Button>
+                        }}
+                      >
+                        <UpdateIcon />
+                      </Button>
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Random Color</p>
@@ -155,15 +158,13 @@ function PaletteGenerator() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button onClick={(e) => {
-                      appDispatch({ type: ADD_COLOR, payload: { name: 'Random Color', color: color } })
-                      toast({
-                        title: `Added Random Color to your colors.`,
-                        variant: 'success'
-                      })
-                    }} variant='ghost'>
-                      <HeartIcon />
-                    </Button>
+                    <div className="w-full flex justify-center">
+                      <AddColorDialog
+                        toastAction
+                        color={{ hexCode: color, name: '' }}
+                        defaults={{ name: '', color: color }}
+                      />
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Save Color</p>
