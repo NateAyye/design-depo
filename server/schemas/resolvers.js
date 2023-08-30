@@ -15,10 +15,12 @@ const resolvers = {
     // Color Queries
     Colors: async () => await Color.find(), // get all Colors
     Color: async (_, { id }) => await Color.findById(id), // get Color by id
+    UserColors: async (_, { userId }) => await Color.find({ userId: userId }), // get all Colors by userId
 
     // Gradients Queries
     Gradients: async () => await Gradients.find(), // Get all gradients
     Gradient: async (_, { id }) => await Gradients.findById(id), // Get gradient by ID
+    UserGradients: async (_, { userId }) => await Gradients.find({ userId: userId }), // Get all gradients by userId
 
     // Font Queries
     Fonts: async () => await Fonts.find(), // Get all Fonts
@@ -31,6 +33,16 @@ const resolvers = {
     // Project Queries
     Projects: async () => await Project.find(),
     Project: async (_, { id }) => await Project.findById(id),
+
+    GetUserItems: async (_, { userId }) => {
+      console.log(userId);
+      const projects = await Project.find({ userId: userId });
+      const palettes = await Palettes.find({ userId: userId });
+      const gradients = await Gradients.find({ userId: userId });
+      const colors = await Color.find({ userId: userId });
+      const fonts = await Fonts.find({ userId: userId });
+      return { projects, palettes, gradients, colors, fonts };
+    }
   },
   Mutation: {
     // User Mutations 
@@ -80,11 +92,11 @@ const resolvers = {
         throw error;
       }
     },
-    updateColor: async (_, { id, hexCode }) => {
+    updateColor: async (_, { id, ...args }) => {
       try {
         const updatedColor = await Color.findByIdAndUpdate(
           id,
-          { hexCode },
+          { ...args },
           { new: true }
         );
         if (!updatedColor) {
@@ -127,10 +139,8 @@ const resolvers = {
         throw error;
       }
     },
-    createFont: async (_, { activeFontFamily }) => {
-      const newFont = await Fonts.create({
-        activeFontFamily,
-      });
+    createFont: async (_, args) => {
+      const newFont = await Fonts.create(args);
       return newFont;
     },
     deleteFont: async (_, { id }) => {
@@ -144,11 +154,11 @@ const resolvers = {
         throw error;
       }
     },
-    updateFont: async (_, { id, activeFontFamily }) => {
+    updateFont: async (_, { id, ...args }) => {
       try {
         const updatedFont = await Fonts.findByIdAndUpdate(
           id,
-          { activeFontFamily },
+          { ...args },
           { new: true }
         );
         if (!updatedFont) {
