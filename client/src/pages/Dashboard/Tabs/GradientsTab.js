@@ -1,34 +1,38 @@
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { PlusIcon } from "@radix-ui/react-icons"
 import { useEffect, useState } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import AddGradientDialog from "../../../components/dialogs/add-gradient-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
+import ItemSkeletonList from "../../../components/item-skeleton-list"
 import TabTitle from "../../../components/tab-title"
 import { Button } from "../../../components/ui/button"
 import { DropdownMenuItem } from "../../../components/ui/dropdown-menu"
+import { useToast } from "../../../components/ui/use-toast"
 import { useAppContext } from "../../../context/AppState"
-import { SET_GRADIENTS } from "../../../context/AppState/actions"
+import { REMOVE_GRADIENT, SET_GRADIENTS } from "../../../context/AppState/actions"
 import { useCopy } from "../../../hooks/useCopy"
 import authService from "../../../lib/auth"
 import { getTextColor } from "../../../lib/colors"
+import { DELETE_GRADIENT } from "../../../lib/mutations"
 import { QUERY_ALL_GRADIENTS } from "../../../lib/queries"
 
 function GradientsTab() {
   const [appState, appDispatch] = useAppContext()
   const [color, setColor] = useState('rgba(255, 255, 255, 1)')
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_GRADIENTS);
+  const [deleteGradient] = useMutation(DELETE_GRADIENT);
   const [name, setName] = useState("Black");
   const navigate = useNavigate()
   const { CopyAndAlert } = useCopy()
+  const { toast } = useToast()
   const dialogProps = { color, setColor, name, setName }
 
   useEffect(() => {
     if (loading) return;
     if (!data) return;
 
-    console.log(data);
     appDispatch({
       type: SET_GRADIENTS, payload: data.Gradients.filter(gradient => gradient.userId === authService.getProfile().data._id)
     })
@@ -55,16 +59,37 @@ function GradientsTab() {
             )
           }}
         />
-        {appState.gradients.map((gradient) => (
+        {loading ? (<ItemSkeletonList />) : appState.gradients.map((gradient) => (
           <ItemContainer
             key={gradient._id}
             title={gradient.gradientName || gradient.name}
+            onRemove={async (e) => {
+              e.stopPropagation()
+              deleteGradient({ variables: { id: gradient._id } }).then((res) => {
+                appDispatch({ type: REMOVE_GRADIENT, payload: gradient._id })
+                toast({
+                  title: `Removed ${ gradient.gradientName } from gradients.`,
+                  description: 'Removed color from gradients.',
+                  variant: 'destructive'
+                })
+              })
+            }}
             onSelect={() => {
               CopyAndAlert({ content: gradient.color })
             }}
             menuContent={
               <>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <AddGradientDialog
+                    editing
+                    gradient={gradient}
+                    triggerElement={() => (
+                      <Button className='w-full justify-start px-2' variant='ghost'>
+                        Edit Gradient
+                      </Button>
+                    )}
+                  />
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={(e) => {
                   e.stopPropagation()
                   navigate({
