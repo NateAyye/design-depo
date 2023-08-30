@@ -8,9 +8,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { useAppContext } from "../../context/AppState";
-import { ADD_GRADIENT, SET_TAB } from "../../context/AppState/actions";
+import { ADD_GRADIENT, SET_TAB, UPDATE_GRADIENT as UPDATE_GRADIENT_STATE } from "../../context/AppState/actions";
 import authService from "../../lib/auth";
-import { CREATE_GRADIENT } from "../../lib/mutations";
+import { CREATE_GRADIENT, UPDATE_GRADIENT } from "../../lib/mutations";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -23,11 +23,14 @@ const formSchema = z.object({
   color: z.string()
 })
 
-function AddGradientDialog({ triggerElement, name, setName, color, setColor, toastAction = false }) {
+function AddGradientDialog({ triggerElement, toastAction = false, editing, gradient }) {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [name, setName] = useState(gradient?.gradientName || '')
+  const [color, setColor] = useState(gradient?.color || 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
   const [, appDispatch] = useAppContext()
   const [createGradient] = useMutation(CREATE_GRADIENT);
+  const [updateGradient] = useMutation(UPDATE_GRADIENT);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const navigate = useNavigate();
   const { setGradient } = useColorPicker(color, setColor);
@@ -45,8 +48,8 @@ function AddGradientDialog({ triggerElement, name, setName, color, setColor, toa
   })
 
   useEffect(() => {
-    setGradient('linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
-  }, []) // eslint-disable-line 
+    setGradient(gradient?.color ?? 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
+  }, [gradient]) // eslint-disable-line 
   // ^^^^ Leave Empty to run once on mount
   // TODO: Fix this warning
 
@@ -59,9 +62,13 @@ function AddGradientDialog({ triggerElement, name, setName, color, setColor, toa
       userId: authService.getProfile().data._id
     }
     try {
-      const mutationResponse = await createGradient({ variables: gradientValues })
-      const gradient = mutationResponse.data;
-      appDispatch({ type: ADD_GRADIENT, payload: gradient.createGradient })
+      const mutationResponse = editing ? await updateGradient({ variables: { id: gradient._id, ...gradientValues } }) : await createGradient({ variables: gradientValues })
+      const gradientRes = mutationResponse.data;
+      if (editing) {
+        appDispatch({ type: UPDATE_GRADIENT_STATE, payload: gradientRes.updateGradient })
+      } else {
+        appDispatch({ type: ADD_GRADIENT, payload: gradientRes.createGradient })
+      }
       toast({
         title: `Success: ${ values.name }`,
         description: 'Gradient saved successfully.',
@@ -163,7 +170,7 @@ function AddGradientDialog({ triggerElement, name, setName, color, setColor, toa
                         }} />
                       </div>
                       {displayColorPicker ? <div className="absolute left-1/2 -translate-x-1/2 -bottom-10 w-fit lg:left-full lg:-translate-x-0 lg:bottom-0 lg:translate-y-1/2 bg-white p-2 z-10">
-                        <ColorPicker hidePresets height={150} width={300} value={color} onChange={setColor} />
+                        <ColorPicker hideColorTypeBtns hidePresets height={150} width={300} value={color} onChange={setColor} />
                       </div> : null}
                     </div>
                   </FormControl>
@@ -176,7 +183,10 @@ function AddGradientDialog({ triggerElement, name, setName, color, setColor, toa
             />
             <div className="min-h-[70px] rounded-lg overflow-hidden flex items-stretch" style={{ background: color }} />
             <div className="flex justify-end space-x-4">
-              <Button variant={'outline'} onClick={() => setOpen(false)}>Cancel</Button>
+              <Button variant={'outline'} onClick={(e) => {
+                e.preventDefault();
+                setOpen(false)
+              }}>Cancel</Button>
               <Button variant={'outline'} type="submit">Submit</Button>
             </div>
           </form>
