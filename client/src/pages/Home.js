@@ -1,15 +1,9 @@
 import React from 'react';
 import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import ColorPicker from './ColorPicker';
-import { Link } from 'react-router-dom';
-const navigation = [
-  { name: 'Color Picker', to: '/ColorPicker.js' },
-  { name: 'Gradient Generator', to: '/ColorPicker.js' },
-  { name: 'Palette Generator', to: '/PaletteGenerator.js' },
-  { name: 'Login', to: '../auth/login-form.js' },
-]
+import { Button } from '../components/ui/button';
+import { Link } from "react-router-dom";
+
+
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -18,7 +12,7 @@ export default function Home() {
     <div className="bg-white">
 
 
-      <div className="relative isolate px-6 pt-14 lg:px-8">
+      <div className="relative isolate px-6 pt-14 lg:px-8 ">
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
           aria-hidden="true"
@@ -31,6 +25,7 @@ export default function Home() {
             }}
           />
         </div>
+        <div className="flex justify-between max-w-7xl mx-auto relative"> 
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
@@ -56,17 +51,32 @@ export default function Home() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
-                href="#"
+                
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Log in
+                <Button variant="primary" asChild>
+                    <Link to='/auth'>Login</Link>
+                </Button>
+                
               </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                Sign up <span aria-hidden="true">→</span>
+              <a className="text-sm font-semibold leading-6 text-gray-900">
+              <Button variant="primary" asChild>
+                    <Link to='/auth'>Sign Up</Link>
+                </Button>
               </a>
             </div>
           </div>
         </div>
+        <div className="hidden lg:block absolute top-0 right-0 w-1/2 h-1/2">
+            <img
+              src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/8a338ef9-a14e-4c93-989b-b510d7b9bad7/d6fjql6-3445cbc6-aa45-4040-9c90-9359b157120b.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzhhMzM4ZWY5LWExNGUtNGM5My05ODliLWI1MTBkN2I5YmFkN1wvZDZmanFsNi0zNDQ1Y2JjNi1hYTQ1LTQwNDAtOWM5MC05MzU5YjE1NzEyMGIuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.TCwKHkkegGY4Q8KP5YwrOgg6DfV1iQ1K5w6yMwsCn9E"
+              alt="gif of color wheel"
+              className="h-auto w-auto object-cover"
+            />
+          </div>
+
+        </div>  
+
         <div
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"
@@ -82,4 +92,4 @@ export default function Home() {
       </div>
     </div>
   )
-}
+};
