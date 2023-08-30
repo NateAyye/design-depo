@@ -97,8 +97,8 @@ const resolvers = {
     },
 
     // Grafient mutations
-    createGradient: async (_, { gradientName, color }) => {
-      const newGradient = await Gradients.create({ gradientName, color, });
+    createGradient: async (_, args) => {
+      const newGradient = await Gradients.create(args);
       return newGradient;
     },
     updateGradient: async (_, { id, gradientName, color }) => {

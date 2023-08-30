@@ -106,13 +106,14 @@ mutation Mutation($updateUserNameId: ID!, $newName: String!) {
   }
 `;
 
-export const ADD_GRADIENT = gql`
-mutation CreateGradient($gradientName: String!, $color: String!) {
-    createGradient(gradientName: $gradientName, color: $color) {
+export const CREATE_GRADIENT = gql`
+mutation CreateGradient($gradientName: String!, $color: String!, $userId: ID!) {
+    createGradient(gradientName: $gradientName, color: $color, userId: $userId) {
       _id
+      userId
+      gradientName
       color
       createdAt
-      gradientName
     }
   }
 `;
@@ -122,6 +123,7 @@ mutation DeleteGradient($deleteGradientId: ID!) {
     deleteGradient(id: $deleteGradientId) {
       _id
       color
+      userId
       createdAt
       gradientName
     }

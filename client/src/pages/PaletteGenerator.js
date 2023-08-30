@@ -93,7 +93,7 @@ function PaletteGenerator() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <AddPaletteDialog palette={{ name: '', colors: paletteState }} />
+                  <AddPaletteDialog toastAction palette={{ name: '', colors: paletteState }} />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Save Palette</p>

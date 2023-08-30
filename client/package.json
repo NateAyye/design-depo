@@ -28,7 +28,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
-    "font-picker-react": "^3.5.2",
     "graphql": "^16.8.0",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
