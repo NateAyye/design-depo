@@ -59,7 +59,6 @@ export const reducer = (state, action) => {
 
     case ADD_GRADIENT:
       const newGradient = {
-        id: state.gradients[state.gradients?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -69,12 +68,12 @@ export const reducer = (state, action) => {
     case REMOVE_GRADIENT:
       return {
         ...state,
-        gradients: state.gradients.filter(g => g.id !== action.payload)
+        gradients: state.gradients.filter(g => g._id !== action.payload)
       };
     case UPDATE_GRADIENT:
       return {
         ...state,
-        gradients: state.gradients.map(g => g.id === action.payload.id ? action.payload : g)
+        gradients: state.gradients.map(g => g._id === action.payload._id ? action.payload : g)
       };
     case SET_GRADIENTS:
       return {
@@ -84,7 +83,6 @@ export const reducer = (state, action) => {
 
     case ADD_FONT:
       const newFont = {
-        id: state.fonts[state.fonts?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -94,12 +92,12 @@ export const reducer = (state, action) => {
     case REMOVE_FONT:
       return {
         ...state,
-        fonts: state.fonts.filter(f => f.id !== action.payload)
+        fonts: state.fonts.filter(f => f._id !== action.payload)
       };
     case UPDATE_FONT:
       return {
         ...state,
-        fonts: state.fonts.map(f => f.id === action.payload.id ? action.payload : f)
+        fonts: state.fonts.map(f => f._id === action.payload._id ? action.payload : f)
       };
     case SET_FONTS:
       return {
