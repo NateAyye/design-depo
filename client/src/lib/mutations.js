@@ -111,3 +111,132 @@ export const UPDATE_GRADIENT = gql`
         }
     }
 `;
+
+export const ADD_Project =gql`
+mutation CreateProject($userName: ID!, $projectName: String!) {
+  createProject(userName: $userName, projectName: $projectName) {
+    _id
+    userName {
+      _id
+      name
+      email
+      password
+    }
+    projectName
+    palettes {
+      _id
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      activeFontFamily
+    }
+  }
+}`;
+
+export const DELETE_PROJECT=gql`
+mutation DeleteProject($deleteProjectId: ID!) {
+  deleteProject(id: $deleteProjectId) {
+    _id
+    userName {
+      _id
+      name
+      email
+      password
+    }
+    projectName
+    palettes {
+      _id
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      activeFontFamily
+    }
+  }
+}`;
+
+export const UPDATE_PROJECT=gql`
+mutation UpdateProjectName($updateProjectNameId: ID!, $newProjectName: String!) {
+  updateProjectName(id: $updateProjectNameId, newProjectName: $newProjectName) {
+    _id
+    projectName
+    userName {
+      _id
+      name
+      email
+      password
+    }
+    palettes {
+      _id
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      activeFontFamily
+    }
+  }
+}`;
