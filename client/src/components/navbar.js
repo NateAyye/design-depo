@@ -14,7 +14,6 @@ import { ModeToggle } from "./ui/theme-toggle";
 function Navbar() {
   const [appState] = useAppContext()
 
-
   return (
     <div className=" border-b">
       <div className="container flex justify-between items-center">
@@ -24,18 +23,42 @@ function Navbar() {
         <nav aria-labelledby="primary-navigation-label" className="my-1">
           <span id="primary-navigation-label" className="sr-only">Primary Navigation</span>
           <ul className="flex justify-center items-center gap-2 [&_li]:flex [&_li]:justify-center [&_li]:items-center">
-            <li>
-              <Button variant="link" asChild>
+            <li className="flex md:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="flex md:hidden" variant="link">Tools</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <Button className='justify-start' variant="link" asChild>
+                      <Link to="/color-picker">Color Picker</Link>
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Button className="justify-start" variant="link" asChild>
+                      <Link to="/gradient-generator">Gradient Generator</Link>
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Button className="justify-start" variant="link" asChild>
+                      <Link to="/palette-generator">Palette Generator</Link>
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </li>
+            <li className="hidden  md:flex">
+              <Button className="hidden md:flex" variant="link" asChild>
                 <Link to="/color-picker">Color Picker</Link>
               </Button>
             </li>
-            <li>
-              <Button variant="link" asChild>
+            <li className="hidden md:flex">
+              <Button className="hidden md:flex" variant="link" asChild>
                 <Link to="/gradient-generator">Gradient Generator</Link>
               </Button>
             </li>
-            <li>
-              <Button variant="link" asChild>
+            <li className="hidden md:flex">
+              <Button className="hidden md:flex" variant="link" asChild>
                 <Link to="/palette-generator">Palette Generator</Link>
               </Button>
             </li>
