@@ -43,7 +43,6 @@ function ColorsTab() {
     refetch()
   })
 
-
   if (error) return <p>Error :(</p>;
 
   return (
@@ -52,6 +51,7 @@ function ColorsTab() {
       <ItemGrid>
         <AddColorDialog
           {...dialogProps}
+          color={{ hexCode: hex, name }}
           triggerElement={() => {
             return (
               <Button className="p-0 m-0 flex-1 flex flex-col justify-center items-center w-full max-w-full h-24 rounded-md shadow relative bg-foreground">
@@ -93,8 +93,21 @@ function ColorsTab() {
                         CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard.`, description: '' })
                       }}
                     >
-                      Copy URL
+                      Share Color
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <AddColorDialog
+                        editing
+                        color={color}
+                        triggerElement={() => (
+                          <Button className='w-full justify-start px-2' variant='ghost'>
+                            Edit Color
+                          </Button>
+                        )}
+                      />
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem onClick={(e) => {
                       e.stopPropagation()
                       navigate({
