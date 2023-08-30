@@ -26,6 +26,8 @@ export const SET_PROJECTS = "SET_PROJECTS";
 export const SET_JWT = "SET_JWT";
 export const REMOVE_JWT = 'REMOVE_JWT'
 
+export const USER_LOGGED_IN = "USER_LOGGED_IN";
+
 export const SET_MODAL_OPEN = "SET_MODAL_OPEN";
 
 export const SET_COLOR_FORMAT = "SET_COLOR_FORMAT";

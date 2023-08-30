@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAppContext } from "../context/AppState";
 import { default as Auth, default as authService } from "../lib/auth";
 import { cn } from "../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -11,6 +12,8 @@ import {
 import { ModeToggle } from "./ui/theme-toggle";
 
 function Navbar() {
+  const [appState] = useAppContext()
+
 
   return (
     <div className=" border-b">
@@ -36,7 +39,7 @@ function Navbar() {
                 <Link to="/palette-generator">Palette Generator</Link>
               </Button>
             </li>
-            {!authService.loggedIn() ? (
+            {!appState.logged_in ? (
               <li>
                 <Button variant="primary" asChild>
                   <Link to="/auth">Login</Link>
