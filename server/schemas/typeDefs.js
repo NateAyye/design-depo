@@ -27,6 +27,8 @@ type Gradient {
 
 type Font {
     _id: ID!
+    fontName: String!
+    userId: ID!
     activeFontFamily: String!
   }
 
@@ -58,15 +60,25 @@ type Auth {
     User: User
   }
 
+type UserItems {
+    palettes: [Palette]
+    gradients: [Gradient]
+    colors: [Color]
+    fonts: [Font]
+    projects: [Project]
+}
+
 type Query {
     Users: [User]!
     User(UserId: ID!): User
 
     Colors: [Color]!
     Color(id: ID!): Color
+    UserColors(userId: ID!): [Color]!
 
     Gradients: [Gradient]!
     Gradient(id: ID!): Gradient
+    UserGradients(userId: ID!): [Gradient]!
 
     Fonts: [Font]!
     Font(id: ID!): Font
@@ -76,6 +88,8 @@ type Query {
 
     Projects: [Project]!
     Project(id: ID!): Project
+
+    GetUserItems(userId: ID!): UserItems!
   }
 
 type Mutation {
@@ -86,13 +100,13 @@ type Mutation {
 
     createColor(hexCode: String!, name: String!, userId: ID!): Color
     deleteColor(id: ID!): Color
-    updateColor(id: ID!, hexCode: String!, name: String): Color
+    updateColor(id: ID!, hexCode: String, name: String): Color
 
     createGradient(gradientName: String!, userId: ID!, color: String!): Gradient!
     updateGradient(id: ID!, gradientName: String!, color: String!): Gradient!
     deleteGradient(id: ID!): Gradient!
 
-    createFont(activeFontFamily: String!): Font
+    createFont(activeFontFamily: String!, fontName: String!, userId: ID!): Font
     deleteFont(id: ID!): Font
     updateFont(id: ID!, activeFontFamily: String!): Font
 
