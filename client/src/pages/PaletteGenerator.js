@@ -1,7 +1,6 @@
 import { CopyIcon, Share1Icon, UpdateIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import tinycolor from "tinycolor2";
 import AddColorDialog from "../components/dialogs/add-color-dialog";
 import AddPaletteDialog from "../components/dialogs/add-palette-dialog";
 import ItemContainer from "../components/item-container";
@@ -9,17 +8,7 @@ import { Button } from "../components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
 import { useToast } from "../components/ui/use-toast";
 import { useCopy } from "../hooks/useCopy";
-import { generateRandomColor } from "../lib/colors";
-
-function formatPalette(paletteStr) {
-  if (!paletteStr) return null;
-  return paletteStr.split('-').map((color) => `#${ color }`)
-}
-
-function generateRandomPalette(color) {
-  const tinyColor = tinycolor(color);
-  return tinyColor.analogous(5, 8).map((color, i) => color.spin(i).toHexString());
-}
+import { formatPalette, generateRandomColor, generateRandomPalette } from "../lib/colors";
 
 function PaletteGenerator() {
   const [searchParams] = useSearchParams();
