@@ -5,23 +5,29 @@ import ItemContainer from '../../../components/item-container';
 import { Button } from '../../../components/ui/button';
 import { useAppContext } from '../../../context/AppState'; // Import useAppContext
 import { ADD_PROJECT,REMOVE_PROJECT,SET_PROJECTS } from '../../../context/AppState/actions';
-//import { Modal, ModalOverlay, ModalContent } from 'Shadcn'; // Make sure to replace '@your-ui-library' with the actual library import
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu";
 //import {Dialog,DialogContent,DialogDescription,DialogHeader,DialogTitle,DialogTrigger,DialogFooter } from "@/components/ui/dialog"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,DialogFooter } from "../../../components/ui/dialog";
 import { useToast } from "../../../components/ui/use-toast"
 import { QUERY_ALL_PROJECTS } from "../../../lib/queries"
 import { useMutation, useQuery } from "@apollo/client"
 import authService from "../../../lib/auth"
-import { DELETE_PROJECT,ADD_Project } from "../../../lib/mutations"
+import { DELETE_PROJECT,ADD_Project,UPDATE_PROJECT } from "../../../lib/mutations"
 
 function ProjectsTab() {
   const { toast } = useToast()
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_PROJECTS);
   const [deleteProject] = useMutation(DELETE_PROJECT);
   const [addProject] = useMutation(ADD_Project);
+  const [updateProjectName] = useMutation(UPDATE_PROJECT);
   const [appState, appDispatch] = useAppContext();
   const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [updatedProjectName, setUpdatedProjectName] = useState(""); //state to hold the updated project name
+  const [selectedProjectId, setSelectedProjectId] = useState(null); //state to keep track of the project ID that you want to update
+  const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false); // state variables to keep track of whether the update popup is open
+
+
 
   useEffect(() => {
     if (loading) return;
@@ -50,6 +56,24 @@ function ProjectsTab() {
     appDispatch({ type: ADD_PROJECT, payload: { projectName } });
     closeCreateProjectModal();
   };
+
+  const updateProject = async () => {
+    if (updatedProjectName.trim() === "") {
+      return; // Don't update if the new project name is empty
+    }
+    
+    // Perform the update operation using the updateProject mutation or API call
+    // For example:
+    await updateProjectName({ variables: { updateProjectNameId: selectedProjectId, newProjectName: updatedProjectName } });
+    
+    // After the update, reset the selectedProjectId and updatedProjectName states
+    setSelectedProjectId(null);
+    setUpdatedProjectName("");
+    setIsUpdatePopupOpen(false); // Close the update popup
+    // Optionally, you can also refetch the data to update the projects list
+    refetch();
+  };
+  
 
  
   return (
@@ -86,6 +110,21 @@ function ProjectsTab() {
               }
             
           }}
+          menuContent={
+                <DropdownMenuItem asChild className={'hover:bg-transparent hover:text-destructive'}>
+                    <Button
+                    onClick={() => {
+                        setSelectedProjectId(project._id);
+                        setUpdatedProjectName(project.projectName);
+                        setIsUpdatePopupOpen(true);
+                      }}
+                    variant={'Default '}
+                    className='w-full flex justify-center items-center gap-1'
+                    >
+                        Update
+                    </Button>
+                </DropdownMenuItem>
+                }
            >
             {/* Render the project content here */}
             <span className="font-bold not-sr-only">
@@ -115,6 +154,33 @@ function ProjectsTab() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={isUpdatePopupOpen} onClose={() => setIsUpdatePopupOpen(false)}>
+        <DialogContent>
+            <DialogHeader>
+            <DialogTitle>Update Project Name</DialogTitle>
+            <DialogDescription>
+                <input
+                type="text"
+                placeholder="Enter updated project name"
+                className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                value={updatedProjectName}
+                onChange={(e) => setUpdatedProjectName(e.target.value)}
+                />
+            </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+            <Button className="mr-2" onClick={() => setIsUpdatePopupOpen(false)}>
+                Cancel
+            </Button>
+            <Button onClick={updateProject} disabled={updatedProjectName.trim() === ""}>
+                Update
+            </Button>
+            </DialogFooter>
+        </DialogContent>
+       </Dialog>
+
+
     </div>
   );
   
