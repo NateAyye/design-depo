@@ -6,6 +6,7 @@ import ColorVariantButton from "../../../components/color-variant-btn"
 import AddPaletteDialog from "../../../components/dialogs/add-palette-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
+import ItemSkeletonList from "../../../components/item-skeleton-list"
 import TabTitle from "../../../components/tab-title"
 import { Button } from "../../../components/ui/button"
 import { DropdownMenuItem } from "../../../components/ui/dropdown-menu"
@@ -52,7 +53,7 @@ function PalettesTab() {
           )}
         />
 
-        {appState.palettes.map((palette) => (
+        {loading ? (<ItemSkeletonList />) : appState.palettes.map((palette) => (
           <ItemContainer
             key={palette._id}
             title={palette.paletteName}
@@ -78,10 +79,18 @@ function PalettesTab() {
                     CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard.`, description: '' })
                   }}
                 >
-                  Copy URL
+                  Share Palette
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Edit Palette
+                <DropdownMenuItem asChild>
+                  <AddPaletteDialog
+                    palette={palette}
+                    editing
+                    triggerElement={() => (
+                      <Button className='w-full justify-start px-2' variant='ghost'>
+                        Edit Palette
+                      </Button>
+                    )}
+                  />
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
