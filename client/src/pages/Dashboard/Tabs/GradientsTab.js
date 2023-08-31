@@ -93,8 +93,8 @@ function GradientsTab() {
                 <DropdownMenuItem onClick={(e) => {
                   e.stopPropagation()
                   navigate({
-                    pathname: `/gradient-picker`, search: createSearchParams({
-                      color: gradient.color,
+                    pathname: `/gradient-generator`, search: createSearchParams({
+                      gradient: gradient.color,
                     }).toString()
                   })
                 }}>Open in Gradient Picker
