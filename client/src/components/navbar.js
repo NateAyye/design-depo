@@ -22,7 +22,7 @@ function Navbar() {
         </Link>
         <nav aria-labelledby="primary-navigation-label" className="my-1">
           <span id="primary-navigation-label" className="sr-only">Primary Navigation</span>
-          <ul className="flex justify-center items-center gap-2 [&_li]:flex [&_li]:justify-center [&_li]:items-center">
+          <ul className="flex justify-center items-center gap-1 [&_li]:flex [&_li]:justify-center [&_li]:items-center">
             <li className="flex md:hidden">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -64,7 +64,7 @@ function Navbar() {
             </li>
             {!appState.logged_in ? (
               <li>
-                <Button variant="primary" asChild>
+                <Button className='px-1' variant="primary" asChild>
                   <Link to="/auth">Login</Link>
                 </Button>
               </li>
