@@ -23,6 +23,9 @@ const AppProvider = ({ value = [], ...props }) => {
 
   useEffect(() => {
     dispatch({ type: USER_LOGGED_IN, payload: authService.loggedIn() })
+    if (authService.isTokenExpired(authService.getToken())) {
+      authService.logout()
+    }
   }, [dispatch])
 
   return <Provider store={store} value={[state, dispatch]} {...props} />;
