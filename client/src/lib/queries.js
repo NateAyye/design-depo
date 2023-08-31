@@ -203,3 +203,91 @@ export const QUERY_ALL_USERS = gql`
         }
     }
 `;
+
+export const QUERY_ALL_PROJECTS=gql`
+query Projects {
+  Projects {
+    _id
+    userName {
+      _id
+      name
+      email
+      password
+    }
+    projectName
+    palettes {
+      _id
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      activeFontFamily
+    }
+  }
+}
+`;
+
+export const QUERY_SINGLE_PROJECT=gql`
+query Project($projectId: ID!) {
+  Project(id: $projectId) {
+    _id
+    userName {
+      _id
+      name
+      email
+      password
+    }
+    projectName
+    palettes {
+      _id
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      activeFontFamily
+    }
+  }
+}
+`;
