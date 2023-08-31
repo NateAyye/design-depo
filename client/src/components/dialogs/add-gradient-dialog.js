@@ -182,12 +182,12 @@ function AddGradientDialog({ triggerElement, toastAction = false, editing, gradi
               )}
             />
             <div className="min-h-[70px] rounded-lg overflow-hidden flex items-stretch" style={{ background: color }} />
-            <div className="flex justify-end space-x-4">
+            <div className="flex flex-row-reverse justify-start gap-3">
+              <Button variant={'outline'} type="submit">Submit</Button>
               <Button variant={'outline'} onClick={(e) => {
                 e.preventDefault();
                 setOpen(false)
               }}>Cancel</Button>
-              <Button variant={'outline'} type="submit">Submit</Button>
             </div>
           </form>
           {error && (

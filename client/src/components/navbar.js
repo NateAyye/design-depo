@@ -18,7 +18,7 @@ function Navbar() {
     <div className=" border-b">
       <div className="container flex justify-between items-center">
         <Link to={'/'}>
-          <h1 className="text-3xl font-bold">Design Depo</h1>
+          <h1 className="text-xl sm:text-3xl font-bold">Design Depo</h1>
         </Link>
         <nav aria-labelledby="primary-navigation-label" className="my-1">
           <span id="primary-navigation-label" className="sr-only">Primary Navigation</span>
