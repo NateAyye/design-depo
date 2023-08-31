@@ -10,6 +10,7 @@ import ColorsTab from "./Tabs/ColorsTab";
 import FontsTab from "./Tabs/FontsTab";
 import GradientsTab from "./Tabs/GradientsTab";
 import PalettesTab from "./Tabs/PalettesTab";
+import ProjectsTab from "./Tabs/ProjectTab";
 
 function Dashboard() {
   const [appState, appDispatch] = useAppContext();
@@ -64,9 +65,7 @@ function Dashboard() {
           </TabsContent>
 
           <TabsContent className='flex-1' value="projects">
-            <div>
-              Projects Tab
-            </div>
+            <ProjectsTab/>
           </TabsContent>
         </div>
       </Tabs >
