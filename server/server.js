@@ -2,7 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const throng = require('throng');
-const WORKERS = process.env.WEB_CONCURRENCY || 2
+const WORKERS = process.env.WEB_CONCURRENCY || 1
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
