@@ -34,3 +34,4 @@ export const SET_COLOR_FORMAT = "SET_COLOR_FORMAT";
 
 export const SET_TAB = "SET_TAB";
 
+export const REMOVE_ITEM_FROM_PROJECT="REMOVE_ITEM_FROM_PROJECT";

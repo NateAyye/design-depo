@@ -3,7 +3,7 @@ import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
-function ItemContainer({ containerStyle, children, onRemove, menuContent, title, onSelect, className, containerClass, dropDownMenu = true }) {
+function ItemContainer({ containerStyle, children, onRemove,onClick, menuContent, title, onSelect, className, containerClass, dropDownMenu = true }) {
   const Container = onSelect ? Button : 'div'
   return (
     <div className={cn("group", className)}>
