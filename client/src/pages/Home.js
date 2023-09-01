@@ -30,10 +30,10 @@ export default function Home() {
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Start designing your vision today with Design Depo{' '}
-              <a href="#" className="font-semibold text-indigo-600">
+              {/*<a href="#" className="font-semibold text-indigo-600">
                 <span className="absolute inset-0" aria-hidden="true" />
                 Sign Up Here <span aria-hidden="true">&rarr;</span>
-              </a>
+          </a>*/}
             </div>
           </div>
           <div className="text-center">
@@ -67,13 +67,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block absolute top-0 right-0 w-1/2 h-1/2">
+       {/* <div className="hidden lg:block absolute top-0 right-0 w-1/2 h-1/2">
             <img
               src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/8a338ef9-a14e-4c93-989b-b510d7b9bad7/d6fjql6-3445cbc6-aa45-4040-9c90-9359b157120b.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzhhMzM4ZWY5LWExNGUtNGM5My05ODliLWI1MTBkN2I5YmFkN1wvZDZmanFsNi0zNDQ1Y2JjNi1hYTQ1LTQwNDAtOWM5MC05MzU5YjE1NzEyMGIuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.TCwKHkkegGY4Q8KP5YwrOgg6DfV1iQ1K5w6yMwsCn9E"
               alt="gif of color wheel"
               className="h-auto w-auto object-cover"
             />
-          </div>
+          </div> */}
 
         </div>  
 
