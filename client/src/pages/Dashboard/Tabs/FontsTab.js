@@ -28,6 +28,8 @@ function FontsTab({ style }) {
   const fonts = useRef()
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_FONTS);
   const [googleFonts, setGoogleFonts] = useState([])
+  const [projectModalOpen, setProjectModalOpen] = useState(false)
+  const [currentFont, setCurrentFont] = useState(null)
 
   useEffect(() => {
     async function fetchFonts() {
@@ -83,8 +85,8 @@ function FontsTab({ style }) {
                 deleteFont({ variables: { id: font._id } }).then((res) => {
                   appDispatch({ type: REMOVE_FONT, payload: font._id })
                   toast({
-                    title: `Removed ${ font.fontName } from colors.`,
-                    description: 'Removed color from colors.',
+                    title: `Removed ${ font.fontName } from fonts.`,
+                    description: 'Removed font from fonts.',
                     variant: 'destructive'
                   })
                 })
@@ -93,7 +95,16 @@ function FontsTab({ style }) {
               menuContent={
                 <>
                   <DropdownMenuItem asChild>
-                    <AddToProjectDialog item={font} type={'fonts'} />
+                    <Button
+                      variant={'ghost'}
+                      className='w-full flex justify-center items-center gap-1'
+                      onClick={() => {
+                        setCurrentFont(font)
+                        setProjectModalOpen(true)
+                      }}
+                    >
+                      Add To Project
+                    </Button>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem asChild className={'hover:bg-transparent'}>
@@ -135,6 +146,7 @@ function FontsTab({ style }) {
         )
         )}
       </ItemGrid>
+      <AddToProjectDialog item={currentFont} type={'fonts'} open={projectModalOpen} setOpen={setProjectModalOpen} />
     </div>
   )
 }
