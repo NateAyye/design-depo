@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { PlusIcon } from "@radix-ui/react-icons"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import ColorVariantButton from "../../../components/color-variant-btn"
 import AddPaletteDialog from "../../../components/dialogs/add-palette-dialog"
@@ -17,6 +17,7 @@ import { useAppContext } from "../../../context/AppState"
 import { REMOVE_PALETTE, SET_PALETTES } from "../../../context/AppState/actions"
 import { useCopy } from "../../../hooks/useCopy"
 import authService from "../../../lib/auth"
+import { generateRandomColor } from "../../../lib/colors"
 import { DELETE_PALETTE } from "../../../lib/mutations"
 import { QUERY_ALL_PALETTES } from "../../../lib/queries"
 
@@ -25,6 +26,8 @@ function PalettesTab() {
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_PALETTES);
   const [deletePalette] = useMutation(DELETE_PALETTE);
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false);
+  const [currentPalette, setCurrentPalette] = useState(null)
   const { toast } = useToast()
   const { CopyAndAlert } = useCopy()
 
@@ -47,8 +50,14 @@ function PalettesTab() {
       <TabTitle title={'Palettes'} />
       <ItemGrid>
         <AddPaletteDialog
+          open={open}
+          editing={!!currentPalette}
+          setOpen={setOpen}
+          palette={currentPalette || { paletteName: '', colors: [generateRandomColor(), generateRandomColor(), generateRandomColor(), generateRandomColor(), generateRandomColor()] }}
           triggerElement={() => (
-            <Button className="p-0 m-0 flex-1 flex flex-col justify-center items-center w-full max-w-full focus-visible:ring-foreground focus-visible:border-2 flex-center rounded-md h-24 bg-foreground">
+            <Button onClick={() => {
+              setCurrentPalette(null)
+            }} className="p-0 m-0 flex-1 flex flex-col justify-center items-center w-full max-w-full focus-visible:ring-foreground focus-visible:border-2 flex-center rounded-md h-24 bg-foreground">
               <PlusIcon className="w-10 h-10 text-background font-bold" scale={3} />
               Add Palette
             </Button>
@@ -93,15 +102,12 @@ function PalettesTab() {
                   Share Palette
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <AddPaletteDialog
-                    palette={palette}
-                    editing
-                    triggerElement={() => (
-                      <Button className='w-full justify-start px-2' variant='ghost'>
-                        Edit Palette
-                      </Button>
-                    )}
-                  />
+                  <Button onClick={() => {
+                    setCurrentPalette(palette)
+                    setOpen(true)
+                  }} className='w-full justify-start ' variant='ghost'>
+                    Edit Palette
+                  </Button>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem

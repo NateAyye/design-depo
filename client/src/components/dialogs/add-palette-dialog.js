@@ -28,9 +28,8 @@ const defaultPalette = {
   colors: Array(5).fill(1).map((v, i) => generateRandomColor())
 }
 
-function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastAction, editing = false }) {
+function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastAction, editing = false, open, setOpen }) {
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
   const [, appDispatch] = useAppContext();
   const navigate = useNavigate();
   const [name, setName] = useState(palette.paletteName);
@@ -55,6 +54,9 @@ function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastActio
 
   useEffect(() => {
     setColors(palette.colors)
+    setActiveColor(palette.colors[0])
+    setRgbValue(hexToRgb(palette.colors[0]))
+    setName(palette.paletteName)
   }, [palette])
 
   async function onFormSubmit(values) {

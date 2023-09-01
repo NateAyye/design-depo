@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HeartIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SketchPicker } from "react-color";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -92,6 +92,14 @@ function AddColorDialog({ toastAction = false, triggerElement, color, editing = 
       variant: 'destructive'
     })
   }
+
+  useEffect(() => {
+    if (!color) return;
+    const hex = color?.hexCode || '#000000'
+    setRgb(hexToRgb(hex))
+    setHex(hex)
+    setName(color?.name || 'Black')
+  }, [color])
 
 
   return (

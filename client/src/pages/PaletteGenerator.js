@@ -14,6 +14,7 @@ function PaletteGenerator() {
   const randomPalette = generateRandomPalette(generateRandomColor());
   const palette = formatPalette(searchParams.get('palette')) || randomPalette;
   const [paletteState, setPaletteState] = useState(palette);
+  const [openModal, setOpenModal] = useState(false)
   const { CopyAndAlert } = useCopy()
 
   useEffect(() => {
@@ -142,6 +143,8 @@ function PaletteGenerator() {
                     <div className="w-full flex justify-center">
                       <AddColorDialog
                         toastAction
+                        open={openModal}
+                        setOpen={setOpenModal}
                         color={{ hexCode: color, name: '' }}
                         defaults={{ name: '', color: color }}
                       />
