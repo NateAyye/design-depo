@@ -134,6 +134,7 @@ type Mutation {
     deleteProject(id: ID!): Project
     updateProjectName(id: ID!, newProjectName: String!): Project
     addItemToProject(id: ID!, itemId: ID!, type: String!): Project
+    removeItemFromProject(id: ID!, itemId: ID!, type: String!): Project
   }
 `;
 

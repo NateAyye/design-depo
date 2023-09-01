@@ -210,6 +210,14 @@ const resolvers = {
         { new: true }
       );
       return updatedProject;
+    },
+    removeItemFromProject: async (_, { id, itemId, type }) => {
+      const updatedProject = await Project.findByIdAndUpdate(
+        id,
+        { $pull: { [type]: itemId } },
+        { new: true }
+      );
+      return updatedProject;
     }
   },
   Color: {
