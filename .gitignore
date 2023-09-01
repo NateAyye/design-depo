@@ -23,3 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 client/.env
 client/src/styles/test.css
+client/build
