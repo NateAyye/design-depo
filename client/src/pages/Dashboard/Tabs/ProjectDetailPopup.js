@@ -50,9 +50,8 @@ function ProjectDetailPopup({ project, onClose }) {
     const [activeGrid, setActiveGrid] = useState("pallets");
     const isButtonActive = (gridName) => activeGrid === gridName;
     const activeButtonStyle = {
-        backgroundColor: "#007BFF", // Change to your desired active button background color
-        color: "white", // Change to your desired active button text color
-        // Add any other styles to highlight the active button
+        backgroundColor: "#007BFF",
+        color: "white", 
       };
 console.log(project);
   return (
