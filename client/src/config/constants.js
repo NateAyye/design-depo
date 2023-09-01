@@ -59,23 +59,23 @@ export const COLOR_HARMONIES = [
 export const DASHBOARD_TABS = [
   {
     name: 'palettes',
-    icon: <ColorWheelIcon className="w-6 h-6" />
+    icon: <ColorWheelIcon className="w-10 h-10 sm:w-6 sm:h-6" />
   },
   {
     name: 'colors',
-    icon: <OpacityIcon className="w-6 h-6" />
+    icon: <OpacityIcon className="w-10 h-10 sm:w-6 sm:h-6" />
   },
   {
     name: 'gradients',
-    icon: <ShadowIcon className="w-6 h-6" />
+    icon: <ShadowIcon className="w-10 h-10 sm:w-6 sm:h-6" />
   },
   {
     name: 'fonts',
-    icon: <FontFamilyIcon className="w-6 h-6" />
+    icon: <FontFamilyIcon className="w-10 h-10 sm:w-6 sm:h-6" />
   },
   {
     name: 'projects',
-    icon: <ArchiveIcon className="w-6 h-6" />
+    icon: <ArchiveIcon className="w-10 h-10 sm:w-6 sm:h-6" />
   },
 ];
 

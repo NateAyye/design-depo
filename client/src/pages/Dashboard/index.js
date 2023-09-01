@@ -33,7 +33,11 @@ function Dashboard() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <TabsTrigger
-                    className={cn(`hover:bg-background/30 flex sm:justify-start text-lg items-center gap-2  hover:text-foreground sm:hover:bg-foreground/30 sm:hover:text-background focus-visible:bg-foreground/70 w-full`, appState.activeDashboardTab === tab.name ? 'text-blue-300 bg-muted-foreground sm:bg-muted-foreground/70 ' : '')}
+                    className={cn(
+                      `hover:bg-background/30 flex sm:justify-start text-lg items-center gap-2  hover:text-foreground sm:hover:bg-foreground/30 sm:hover:text-background focus-visible:bg-foreground/70 w-full`,
+                      appState.activeDashboardTab === tab.name ? 'text-blue-300 bg-muted-foreground sm:bg-muted-foreground/70 ' : '',
+
+                    )}
                     value={tab.name}
                   >
                     {tab.icon} <p className="sr-only sm:not-sr-only">{properCase(tab.name)}</p>
@@ -65,7 +69,7 @@ function Dashboard() {
           </TabsContent>
 
           <TabsContent className='flex-1' value="projects">
-            <ProjectsTab/>
+            <ProjectsTab />
           </TabsContent>
         </div>
       </Tabs >

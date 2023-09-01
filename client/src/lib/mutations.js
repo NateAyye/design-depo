@@ -183,6 +183,53 @@ export const UPDATE_GRADIENT = gql`
     }
 `;
 
+export const ADD_ITEM_TO_PROJECT = gql`
+mutation AddItemToProject($id: ID!, $type: String!, $itemId: ID!) {
+  addItemToProject(id: $id, type: $type, itemId: $itemId) {
+    _id
+    userName {
+      _id
+      name
+      email
+    }
+    palettes {
+      _id
+      userId
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      userId
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      fontName
+      userId
+      activeFontFamily
+    }
+    projectName
+  }
+}
+`
+
 export const ADD_Project =gql`
 mutation CreateProject($userName: ID!, $projectName: String!) {
   createProject(userName: $userName, projectName: $projectName) {

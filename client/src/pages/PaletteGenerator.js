@@ -6,16 +6,14 @@ import AddPaletteDialog from "../components/dialogs/add-palette-dialog";
 import ItemContainer from "../components/item-container";
 import { Button } from "../components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
-import { useToast } from "../components/ui/use-toast";
 import { useCopy } from "../hooks/useCopy";
-import { formatPalette, generateRandomColor, generateRandomPalette } from "../lib/colors";
+import { formatPalette, generateRandomColor, generateRandomPalette, getTextColor } from "../lib/colors";
 
 function PaletteGenerator() {
   const [searchParams] = useSearchParams();
   const randomPalette = generateRandomPalette(generateRandomColor());
   const palette = formatPalette(searchParams.get('palette')) || randomPalette;
   const [paletteState, setPaletteState] = useState(palette);
-  const { toast } = useToast()
   const { CopyAndAlert } = useCopy()
 
   useEffect(() => {
@@ -36,7 +34,7 @@ function PaletteGenerator() {
         <h2 className="text-5xl self-start font-bold font-segoe ">Palette Generator</h2>
         <small className="text-foreground/80 self-start">ShortCut: (press <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">CTRL</kbd> + <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">Spacebar</kbd> to generate a random palette)</small>
         <section className="container px-10 my-5 flex justify-end items-center ">
-          <div className="flex flex-row-reverse p-1 gap-3 border rounded-sm flex-1">
+          <div className="flex flex-row-reverse p-1 gap-3 border rounded-sm flex-1" >
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -47,13 +45,7 @@ function PaletteGenerator() {
                       palette: paletteState.map((color) => color.replace('#', '')).join('-'),
                     }).toString()
                     const url = window.location.origin + path + '?' + serarchParams
-                    navigator.clipboard.writeText(url);
-                    // Alert the copied text
-                    toast({
-                      title: `Copied ${ url } to clipboard.`,
-                      description: 'Copied URL to clipboard.',
-                      variant: 'success'
-                    })
+                    CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard` })
                   }} variant='ghost'>
                     <Share1Icon />
                   </Button>
@@ -98,7 +90,7 @@ function PaletteGenerator() {
         {paletteState.map((color) => (
           <div
             key={color}
-            style={{ backgroundColor: color }}
+            style={{ backgroundColor: color, color: getTextColor(color) }}
             role="button"
             tabIndex={0}
             className="group/palette flex h-full justify-end items-center sm:justify-center sm:items-end min-h-[200px] flex-1 hover:flex-[1.5] focus-visible:flex-[1.5]"
@@ -108,9 +100,9 @@ function PaletteGenerator() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="w-full flex justify-center">
-                    <Button  className='h-9 w-9 p-0' onClick={() => CopyAndAlert({ content: color })} variant='ghost'>
-                      <CopyIcon />
-                    </Button>
+                      <Button className='h-9 w-9 p-0' onClick={() => CopyAndAlert({ content: color })} variant='ghost'>
+                        <CopyIcon />
+                      </Button>
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>

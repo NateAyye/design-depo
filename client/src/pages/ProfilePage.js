@@ -42,7 +42,7 @@ function ProfilePage() {
             </AvatarContainer>
             <ItemsDisplayContainer>
               {DASHBOARD_TABS.map((tab, index) => (
-                <div className="flex">
+                <div key={tab.name} className="flex">
                   {tab.icon}: {items?.[tab.name]?.length ? items?.[tab.name].length + 1 : 0}
                 </div>
               ))}

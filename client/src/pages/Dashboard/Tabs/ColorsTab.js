@@ -3,6 +3,7 @@ import { PlusIcon } from "@radix-ui/react-icons"
 import { useEffect, useState } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import AddColorDialog from "../../../components/dialogs/add-color-dialog"
+import AddToProjectDialog from "../../../components/dialogs/add-to-project-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
 import ItemSkeletonList from "../../../components/item-skeleton-list"
@@ -84,6 +85,10 @@ function ColorsTab() {
                 containerStyle={{ background: color.hexCode }}
                 menuContent={
                   <>
+                    <DropdownMenuItem asChild>
+                      <AddToProjectDialog item={color} type={'colors'} />
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem
                       onClick={(e) => {
                         e.stopPropagation()

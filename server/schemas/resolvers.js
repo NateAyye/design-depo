@@ -36,7 +36,7 @@ const resolvers = {
 
     GetUserItems: async (_, { userId }) => {
       console.log(userId);
-      const projects = await Project.find({ userId: userId });
+      const projects = await Project.find({ userName: userId });
       const palettes = await Palettes.find({ userId: userId });
       const gradients = await Gradients.find({ userId: userId });
       const colors = await Color.find({ userId: userId });
@@ -202,6 +202,15 @@ const resolvers = {
       );
       return updatedProject;
     },
+
+    addItemToProject: async (_, { id, itemId, type }) => {
+      const updatedProject = await Project.findByIdAndUpdate(
+        id,
+        { $push: { [type]: itemId } },
+        { new: true }
+      );
+      return updatedProject;
+    }
   },
   Color: {
     references: async (parent) => {

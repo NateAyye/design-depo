@@ -133,6 +133,7 @@ type Mutation {
     createProject(userName: ID!, projectName: String!): Project
     deleteProject(id: ID!): Project
     updateProjectName(id: ID!, newProjectName: String!): Project
+    addItemToProject(id: ID!, itemId: ID!, type: String!): Project
   }
 `;
 

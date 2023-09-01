@@ -5,6 +5,9 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs))
 }
 
+export function generateRandomId() {
+  return Math.random().toString(36).slice(2, 9)
+}
 
 export function properCase(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)

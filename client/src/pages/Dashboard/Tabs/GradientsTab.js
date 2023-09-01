@@ -17,6 +17,7 @@ import authService from "../../../lib/auth"
 import { getTextColor } from "../../../lib/colors"
 import { DELETE_GRADIENT } from "../../../lib/mutations"
 import { QUERY_ALL_GRADIENTS } from "../../../lib/queries"
+import AddToProjectDialog from "../../../components/dialogs/add-to-project-dialog"
 
 function GradientsTab() {
   const [appState, appDispatch] = useAppContext()
@@ -79,6 +80,10 @@ function GradientsTab() {
             }}
             menuContent={
               <>
+                    <DropdownMenuItem asChild>
+                      <AddToProjectDialog item={gradient} type={'gradients'} />
+                    </DropdownMenuItem>
+
                 <DropdownMenuItem asChild>
                   <AddGradientDialog
                     editing
@@ -89,6 +94,15 @@ function GradientsTab() {
                       </Button>
                     )}
                   />
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={(e) => {
+                  e.stopPropagation()
+                  const url = window.location.origin + '/gradient-generator?' + createSearchParams({
+                    gradient: gradient.color
+                  }).toString()
+                  CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard.`, description: '' })
+                }}>
+                  Share Gradient
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={(e) => {
                   e.stopPropagation()

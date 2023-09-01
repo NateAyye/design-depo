@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { PlusIcon } from "@radix-ui/react-icons"
 import { useEffect, useRef, useState } from "react"
 import AddFontDialog from "../../../components/dialogs/add-font-dialog"
+import AddToProjectDialog from "../../../components/dialogs/add-to-project-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
 import ItemSkeletonList from "../../../components/item-skeleton-list"
@@ -91,6 +92,10 @@ function FontsTab({ style }) {
               title={font.fontName}
               menuContent={
                 <>
+                  <DropdownMenuItem asChild>
+                    <AddToProjectDialog item={font} type={'fonts'} />
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem asChild className={'hover:bg-transparent'}>
                     <Button
                       variant={'ghost'}
@@ -107,7 +112,7 @@ function FontsTab({ style }) {
                     <Button
                       variant={'ghost'}
                       className='w-full flex justify-center items-center gap-1'
-                      onClick={() => CopyAndAlert({ content: "@import url('https://fonts.googleapis.com/css2?family={font.activeFontFamily}&display=swap');" })}
+                      onClick={() => CopyAndAlert({ content: `@import url('https://fonts.googleapis.com/css2?family=${ font.activeFontFamily }&display=swap');` })}
                     >
                       Copy CSS Import
                     </Button>

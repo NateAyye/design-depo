@@ -4,6 +4,8 @@ import { useEffect } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import ColorVariantButton from "../../../components/color-variant-btn"
 import AddPaletteDialog from "../../../components/dialogs/add-palette-dialog"
+import AddToProjectDialog from "../../../components/dialogs/add-to-project-dialog"
+import { ExportDialog } from "../../../components/dialogs/export-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
 import ItemSkeletonList from "../../../components/item-skeleton-list"
@@ -70,6 +72,15 @@ function PalettesTab() {
             }}
             menuContent={
               <>
+                <DropdownMenuItem asChild>
+                  <AddToProjectDialog item={palette} type={'palettes'} />
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
+                  <ExportDialog
+                    palette={palette}
+                  />
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={(e) => {
                     e.stopPropagation()
