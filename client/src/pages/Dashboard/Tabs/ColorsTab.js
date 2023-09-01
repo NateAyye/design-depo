@@ -29,6 +29,8 @@ function ColorsTab() {
   const dialogProps = { hex, setHex, rgb, setRgb, name, setName }
   const { toast } = useToast()
   const { CopyAndAlert } = useCopy()
+  const [selectedColor, setSelectedColor] = useState('#000000')
+  const [editColorModalOpen, setEditColorModalOpen] = useState(false)
   const navigate = useNavigate()
 
 
@@ -102,15 +104,12 @@ function ColorsTab() {
                     </DropdownMenuItem>
 
                     <DropdownMenuItem asChild>
-                      <AddColorDialog
-                        editing
-                        color={color}
-                        triggerElement={() => (
-                          <Button className='w-full justify-start px-2' variant='ghost'>
-                            Edit Color
-                          </Button>
-                        )}
-                      />
+                      <Button className="w-full justify-start" variant='ghost' onClick={() => {
+                        setSelectedColor(color)
+                        setEditColorModalOpen(true)
+                      }}>
+                        Edit Button
+                      </Button>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem onClick={(e) => {
@@ -141,6 +140,15 @@ function ColorsTab() {
               </ItemContainer>
             )
           })}
+        <AddColorDialog
+          editing
+          open={editColorModalOpen}
+          setOpen={setEditColorModalOpen}
+          color={selectedColor}
+          triggerElement={() => (
+            <div className="sr-only"></div>
+          )}
+        />
       </ItemGrid>
     </div>
   )

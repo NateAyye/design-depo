@@ -23,13 +23,12 @@ const formSchema = z.object({
   color: z.string()
 })
 
-function AddColorDialog({ toastAction = false, triggerElement, color, editing = false }) {
+function AddColorDialog({ toastAction = false, triggerElement, color, editing = false, open, setOpen }) {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [error, setError] = useState(null);
   const [rgb, setRgb] = useState(hexToRgb(color.hexCode || '#000000'));
   const [hex, setHex] = useState(color.hexCode || '#000000');
   const [name, setName] = useState(color.name || 'Black');
-  const [open, setOpen] = useState(false);
   const [createColor] = useMutation(CREATE_COLOR);
   const [updateColor] = useMutation(UPDATE_COLOR)
   const navigate = useNavigate();

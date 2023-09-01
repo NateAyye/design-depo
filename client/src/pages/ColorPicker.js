@@ -20,6 +20,7 @@ function ColorPicker() {
   const [appState] = useAppContext();
   const [opacityBg, setOpacityBg] = useState("1");
   const { CopyAndAlert } = useCopy()
+  const [modalOpen, setModalOpen] = useState(false)
   const [background, setBackground] = useState({
     h: 250,
     s: 0,
@@ -95,6 +96,8 @@ function ColorPicker() {
           <div className="absolute top-3 right-4 flex justify-center items-center gap-3">
             <AddColorDialog
               toastAction
+              open={modalOpen}
+              setOpen={setModalOpen}
               color={{ hexCode: state.hexValue, name: state.colorName }}
               defaults={{ name: state.colorName, color: state.hexValue }}
             />
