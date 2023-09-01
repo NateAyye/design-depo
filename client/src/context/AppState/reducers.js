@@ -11,7 +11,7 @@ export const reducer = (state, action) => {
     case ADD_COLOR:
       return {
         ...state,
-        colors: [...state.colors, ...action.payload]
+        colors: [...state.colors, action.payload]
       };
     case REMOVE_COLOR:
       return {
