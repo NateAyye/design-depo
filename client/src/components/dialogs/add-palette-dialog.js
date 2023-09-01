@@ -7,10 +7,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { useAppContext } from "../../context/AppState";
-import { ADD_PALETTE, SET_TAB } from "../../context/AppState/actions";
+import { ADD_PALETTE, SET_TAB, UPDATE_PALETTE as UPDATE_PALETTE_STATE } from "../../context/AppState/actions";
 import authService from "../../lib/auth";
 import { generateRandomColor, hexToRgb } from "../../lib/colors";
-import { CREATE_PALETTE } from "../../lib/mutations";
+import { CREATE_PALETTE, UPDATE_PALETTE } from "../../lib/mutations";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -28,16 +28,17 @@ const defaultPalette = {
   colors: Array(5).fill(1).map((v, i) => generateRandomColor())
 }
 
-function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastAction }) {
+function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastAction, editing = false }) {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [, appDispatch] = useAppContext();
   const navigate = useNavigate();
-  const [name, setName] = useState(palette.name);
+  const [name, setName] = useState(palette.paletteName);
   const [colors, setColors] = useState(palette.colors);
   const [activeColor, setActiveColor] = useState(palette.colors[0]);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [createPalette] = useMutation(CREATE_PALETTE);
+  const [updatePalette] = useMutation(UPDATE_PALETTE)
   const [rgbValue, setRgbValue] = useState(hexToRgb(activeColor));
   const { toast } = useToast();
   const form = useForm({
@@ -67,26 +68,31 @@ function AddPaletteDialog({ triggerElement, palette = defaultPalette, toastActio
       color5: colors[4]
     }
     try {
-      const mutationResponse = await createPalette({ variables: { ...paletteValues } })
-      const palette = mutationResponse.data;
-      appDispatch({ type: ADD_PALETTE, payload: palette.createPalette })
-      toast({
+      const mutationResponse = editing ? await updatePalette({ variables: { id: palette._id, ...paletteValues } }) : await createPalette({ variables: { ...paletteValues } })
+      const paletteData = mutationResponse.data;
+      if (editing) {
+        appDispatch({ type: UPDATE_PALETTE_STATE, payload: paletteData.updatePalette })
+      } else {
+        appDispatch({ type: ADD_PALETTE, payload: paletteData.createPalette })
+      }
+      const toastData = {
         title: `Success: ${ values.name }`,
-        description: 'Color saved successfully.',
-        action: !toastAction ? null : (
-          <ToastAction
-            onClick={() => {
-              appDispatch({ type: SET_TAB, payload: 'palettes' })
-              localStorage.setItem('activeDashboardTab', 'palettes')
-              navigate('/dashboard')
-            }}
-            altText="Go to Colors Tab"
-          >
-            View
-          </ToastAction>
-        ),
+        description: 'palette saved successfully.',
         variant: 'success'
-      })
+      }
+      if (toastAction) {
+        toastData.action = (<ToastAction
+          onClick={() => {
+            appDispatch({ type: SET_TAB, payload: 'palettes' })
+            localStorage.setItem('activeDashboardTab', 'palettes')
+            navigate('/dashboard')
+          }}
+          altText="Go to palettes Tab"
+        >
+          View
+        </ToastAction>)
+      }
+      toast(toastData)
       setOpen(false);
     } catch (error) {
       setError(error?.response?.data?.message || error?.message || 'Something went wrong.');

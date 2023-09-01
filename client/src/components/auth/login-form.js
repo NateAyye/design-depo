@@ -4,6 +4,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as z from 'zod';
+import { useAppContext } from '../../context/AppState';
+import { USER_LOGGED_IN } from '../../context/AppState/actions';
 import Auth from '../../lib/auth';
 import { LOGIN_USER } from '../../lib/mutations';
 import { Button } from '../ui/button';
@@ -32,6 +34,7 @@ const formSchema = z.object({
 
 const LoginForm = () => {
   const [error, setError] = React.useState(null);
+  const [, appDispatch] = useAppContext();
   const navigate = useNavigate();
   const [login] = useMutation(LOGIN_USER);
 
@@ -55,7 +58,8 @@ const LoginForm = () => {
       })
       const token = mutationResponse.data.login.token;
       Auth.login(token);
-      navigate('/')
+      appDispatch({ type: USER_LOGGED_IN, payload: true })
+      navigate('/dashboard')
     } catch (error) {
       setError(error?.response?.data?.message || 'Something went wrong.');
       setTimeout(() => {

@@ -2,6 +2,7 @@ import { CopyIcon, SizeIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { useCallback, useState } from "react";
 import { ChromePicker } from "react-color";
 import tinycolor from "tinycolor2";
+import ColorVariantButton from "../components/color-variant-btn";
 import AddColorDialog from "../components/dialogs/add-color-dialog";
 import { Button } from "../components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
@@ -13,7 +14,6 @@ import { SET_COLOR_NAME, SET_HEX, SET_RGB } from "../context/ColorPicker/actions
 import { useCopy } from "../hooks/useCopy";
 import { generateRandomColor, getColorName, getTextColor, hexToRgb } from "../lib/colors";
 import { properCase } from "../lib/utils";
-import ColorVariantButton from "../components/color-variant-btn";
 
 function ColorPicker() {
   const [state, dispatch] = useColorPickerContext();
@@ -43,9 +43,6 @@ function ColorPicker() {
       setOpacityBg(data.hsl.a);
     }
   };
-
-  const dialogProps = { hex: state.hexValue, rgb: state.rgbValue, name: state.colorName, setHex: (hex) => dispatch({ type: SET_HEX, payload: hex }), setRgb: (rgb) => dispatch({ type: SET_RGB, payload: rgb }), setName: (name) => dispatch({ type: SET_COLOR_NAME, payload: name }) }
-
 
   return (
     <div id="main" className="w-full pb-10">
@@ -97,8 +94,8 @@ function ColorPicker() {
           {state.colorName}
           <div className="absolute top-3 right-4 flex justify-center items-center gap-3">
             <AddColorDialog
-              {...dialogProps}
               toastAction
+              color={{ hexCode: state.hexValue, name: state.colorName }}
               defaults={{ name: state.colorName, color: state.hexValue }}
             />
             <Sheet>

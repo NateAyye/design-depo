@@ -1,57 +1,139 @@
-import { useState } from "react"
-import tinycolor from "tinycolor2"
+import { useMutation, useQuery } from "@apollo/client"
+import { PlusIcon } from "@radix-ui/react-icons"
+import { useEffect, useRef, useState } from "react"
+import AddFontDialog from "../../../components/dialogs/add-font-dialog"
+import AddToProjectDialog from "../../../components/dialogs/add-to-project-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
+import ItemSkeletonList from "../../../components/item-skeleton-list"
 import TabTitle from "../../../components/tab-title"
 import { Button } from "../../../components/ui/button"
 import { DropdownMenuItem } from "../../../components/ui/dropdown-menu"
-import { getTextColor } from "../../../lib/colors"
+import { useToast } from "../../../components/ui/use-toast"
+import { useAppContext } from "../../../context/AppState"
+import { REMOVE_FONT, SET_FONTS } from "../../../context/AppState/actions"
+import { useCopy } from "../../../hooks/useCopy"
+import authService from "../../../lib/auth"
+import { DELETE_FONT } from "../../../lib/mutations"
+import { QUERY_ALL_FONTS } from "../../../lib/queries"
+
+const apiKey = 'AIzaSyC6zgSrt_c3HKNqkUqqITZ0zgWTpPzfzdY'
+
 
 function FontsTab({ style }) {
-  const [test, setTest] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  const color = tinycolor('#0000ff')
+  const [appState, appDispatch] = useAppContext()
+  const [deleteFont] = useMutation(DELETE_FONT);
+  const { toast } = useToast()
+  const { CopyAndAlert } = useCopy()
+  const fonts = useRef()
+  const { loading, error, data, refetch } = useQuery(QUERY_ALL_FONTS);
+  const [googleFonts, setGoogleFonts] = useState([])
+
+  useEffect(() => {
+    async function fetchFonts() {
+      if (fonts.current) return
+      const res = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${ apiKey }`)
+      const data = await res.json()
+      setGoogleFonts(data.items)
+    }
+    fetchFonts()
+  }, [])
+
+  useEffect(() => {
+    if (loading) return;
+    if (!data) return;
+    appDispatch({
+      type: SET_FONTS, payload: data.Fonts.filter(font => font.userId === authService.getProfile().data._id)
+    })
+  }, [data, loading, appDispatch])
+
+  useEffect(() => {
+    refetch()
+  })
+
+
+
+  if (error) return <p>Error :(</p>;
+
+
   return (
     <div>
       <TabTitle title={'Fonts'} />
       <ItemGrid>
-        {test.map((_, i) => {
-          const test1 = color.spin(i * 8).toHexString()
-          return (
+        <AddFontDialog
+          triggerElement={() => (
+            <Button className="p-0 m-0 flex-1 flex flex-col justify-center items-center w-full max-w-full focus-visible:ring-foreground focus-visible:border-2 flex-center rounded-md h-24 bg-foreground">
+              <PlusIcon className="w-10 h-10 text-background font-bold" scale={3} />
+              Add Font
+            </Button>
+          )}
+        />
+        {loading ? (<ItemSkeletonList />) : appState.fonts.map((font) => (
+          <div key={font._id}>
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family={font.activeFontFamily}&display=swap');
+            </style>
             <ItemContainer
-              onSelect={(e) => {
-                console.log(e.target)
+              key={font._id}
+              containerClass={'bg-foreground text-background'}
+              containerStyle={{ fontFamily: font.activeFontFamily }}
+              onRemove={async (e) => {
+                e.stopPropagation()
+                // TODO: Add remove color functionality
+                deleteFont({ variables: { id: font._id } }).then((res) => {
+                  appDispatch({ type: REMOVE_FONT, payload: font._id })
+                  toast({
+                    title: `Removed ${ font.fontName } from colors.`,
+                    description: 'Removed color from colors.',
+                    variant: 'destructive'
+                  })
+                })
               }}
-              key={_}
-              containerStyle={{ color: getTextColor(test1), backgroundColor: test1 }}
-              onRemove={() => {
-                setTest((prev) => prev.filter((_, index) => index !== i))
-              }}
-              title={test1}
+              title={font.fontName}
               menuContent={
                 <>
+                  <DropdownMenuItem asChild>
+                    <AddToProjectDialog item={font} type={'fonts'} />
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem asChild className={'hover:bg-transparent'}>
                     <Button
                       variant={'ghost'}
                       className='w-full flex justify-center items-center gap-1'
+                      asChild
+                    // onClick={() => CopyAndAlert({ content: font.activeFontFamily })}
                     >
-                      Open in editor
+                      <a href={googleFonts.find(fontItem => fontItem.family === font.activeFontFamily)?.files.regular} download={`${ font.activeFontFamily }.ttf`} >
+                        Download Font (.ttf)
+                      </a>
                     </Button>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className={'hover:bg-transparent'}>
                     <Button
                       variant={'ghost'}
                       className='w-full flex justify-center items-center gap-1'
+                      onClick={() => CopyAndAlert({ content: `@import url('https://fonts.googleapis.com/css2?family=${ font.activeFontFamily }&display=swap');` })}
                     >
-                      Open in editor
+                      Copy CSS Import
+                    </Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className={'hover:bg-transparent'}>
+                    <Button
+                      variant={'ghost'}
+                      className='w-full flex justify-center items-center gap-1'
+                      onClick={() => CopyAndAlert({ content: font.activeFontFamily })}
+                    >
+                      Copy Font Family
                     </Button>
                   </DropdownMenuItem>
                 </>
               }
             >
-              {_}
+              {font.activeFontFamily}
             </ItemContainer>
-          )
-        })}
+          </div>
+        )
+        )}
       </ItemGrid>
     </div>
   )

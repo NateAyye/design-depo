@@ -3,6 +3,7 @@ import { PlusIcon } from "@radix-ui/react-icons"
 import { useEffect, useState } from "react"
 import { createSearchParams, useNavigate } from "react-router-dom"
 import AddColorDialog from "../../../components/dialogs/add-color-dialog"
+import AddToProjectDialog from "../../../components/dialogs/add-to-project-dialog"
 import ItemContainer from "../../../components/item-container"
 import ItemGrid from "../../../components/item-grid"
 import ItemSkeletonList from "../../../components/item-skeleton-list"
@@ -43,7 +44,6 @@ function ColorsTab() {
     refetch()
   })
 
-
   if (error) return <p>Error :(</p>;
 
   return (
@@ -52,6 +52,7 @@ function ColorsTab() {
       <ItemGrid>
         <AddColorDialog
           {...dialogProps}
+          color={{ hexCode: hex, name }}
           triggerElement={() => {
             return (
               <Button className="p-0 m-0 flex-1 flex flex-col justify-center items-center w-full max-w-full h-24 rounded-md shadow relative bg-foreground">
@@ -84,6 +85,10 @@ function ColorsTab() {
                 containerStyle={{ background: color.hexCode }}
                 menuContent={
                   <>
+                    <DropdownMenuItem asChild>
+                      <AddToProjectDialog item={color} type={'colors'} />
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem
                       onClick={(e) => {
                         e.stopPropagation()
@@ -93,8 +98,21 @@ function ColorsTab() {
                         CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard.`, description: '' })
                       }}
                     >
-                      Copy URL
+                      Share Color
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <AddColorDialog
+                        editing
+                        color={color}
+                        triggerElement={() => (
+                          <Button className='w-full justify-start px-2' variant='ghost'>
+                            Edit Color
+                          </Button>
+                        )}
+                      />
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem onClick={(e) => {
                       e.stopPropagation()
                       navigate({

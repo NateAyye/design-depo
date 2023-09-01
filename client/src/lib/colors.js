@@ -62,5 +62,26 @@ const getColorName = async (color) => {
   }
 }
 
-export { formatColor, generateRandomColor, getColorName, getTextColor, hexToRgb };
+function formatPalette(paletteStr) {
+  if (!paletteStr) return null;
+  return paletteStr.split('-').map((color) => `#${ color }`)
+}
+
+function generateRandomPalette(color) {
+  const tinyColor = tinycolor(color);
+  return tinyColor.analogous(5, 8).map((color, i) => color.spin(i).toHexString());
+}
+
+
+function generateRandomGradient(color) {
+  const tinyColor = tinycolor(color);
+  const gradientType = Math.random() > 0.5 ? 'linear-gradient' : 'radial-gradient';
+  const gradientDirection = `${ Math.floor(Math.random() * 360) }deg,`;
+  const gradientColor = tinyColor.analogous(3, 8).map((color, i) => ` ${ color.spin(i * 10).toHexString() } ${ i * 50 }%`).join(',');
+  const builtGradient = `${ gradientType }(${ gradientType === 'linear-gradient' ? gradientDirection : '' }` + gradientColor + ')';
+  return builtGradient
+}
+
+
+export { formatColor, formatPalette, generateRandomColor, generateRandomGradient, generateRandomPalette, getColorName, getTextColor, hexToRgb };
 
