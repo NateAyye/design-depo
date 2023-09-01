@@ -11,6 +11,28 @@ mutation createColor($hexCode: String!, $name: String!, $userId: ID!) {
   }
 }
 `;
+
+export const CREATE_FONT = gql`
+mutation CreateFont($activeFontFamily: String!, $fontName: String!, $userId: ID!) {
+  createFont(activeFontFamily: $activeFontFamily, fontName: $fontName, userId: $userId) {
+    _id
+    fontName
+    userId
+    activeFontFamily
+  }
+}
+`;
+
+export const DELETE_FONT = gql`
+mutation DeleteFont($id: ID!) {
+  deleteFont(id: $id) {
+    _id
+    fontName
+    userId
+    activeFontFamily
+  }
+}
+`;
 export const CREATE_PALETTE = gql`
 mutation CreatePalette($userId: ID!, $paletteName: String!, $color1: String!, $color2: String!, $color3: String!, $color4: String!, $color5: String!) {
   createPalette(userId: $userId, paletteName: $paletteName, color1: $color1, color2: $color2, color3: $color3, color4: $color4, color5: $color5) {
@@ -27,6 +49,24 @@ mutation CreatePalette($userId: ID!, $paletteName: String!, $color1: String!, $c
   }
 }
 `;
+
+export const UPDATE_PALETTE = gql`
+mutation UpdatePalette($id: ID!, $paletteName: String, $color1: String, $color2: String, $color3: String, $color4: String, $color5: String) {
+  updatePalette(id: $id, paletteName: $paletteName, color1: $color1, color2: $color2, color3: $color3, color4: $color4, color5: $color5) {
+    _id
+    userId
+    paletteName
+    createdAt
+    color1
+    color2
+    color3
+    color4
+    colors
+    color5
+  }
+}
+`
+
 export const DELETE_PALETTE = gql`
 mutation Mutation($paletteId: ID!) {
     deletePalette(id: $paletteId) {
@@ -87,11 +127,13 @@ mutation Mutation($deleteColorId: ID!) {
 `;
 
 export const UPDATE_COLOR = gql`
-mutation UpdateColor($updateColorId: ID!, $hexCode: String!) {
-    updateColor(id: $updateColorId, hexCode: $hexCode) {
+mutation UpdateColor($id: ID!, $hexCode: String, $name: String) {
+    updateColor(id: $id, name: $name, hexCode: $hexCode) {
       _id
       createdAt
       hexCode
+      userId
+      name
       references
     }
   }
@@ -119,8 +161,8 @@ mutation CreateGradient($gradientName: String!, $color: String!, $userId: ID!) {
 `;
 
 export const DELETE_GRADIENT = gql`
-mutation DeleteGradient($deleteGradientId: ID!) {
-    deleteGradient(id: $deleteGradientId) {
+mutation DeleteGradient($id: ID!) {
+    deleteGradient(id: $id) {
       _id
       color
       userId
@@ -131,8 +173,8 @@ mutation DeleteGradient($deleteGradientId: ID!) {
 `;
 
 export const UPDATE_GRADIENT = gql`
-    mutation UpdateGradient($updateGradientId: ID!, $gradientName: String!, $color: String!) {
-        updateGradient(id: $updateGradientId, gradientName: $gradientName, color: $color) {
+    mutation UpdateGradient($id: ID!, $gradientName: String!, $color: String!) {
+        updateGradient(id: $id, gradientName: $gradientName, color: $color) {
         _id
         color
         createdAt
@@ -140,6 +182,53 @@ export const UPDATE_GRADIENT = gql`
         }
     }
 `;
+
+export const ADD_ITEM_TO_PROJECT = gql`
+mutation AddItemToProject($id: ID!, $type: String!, $itemId: ID!) {
+  addItemToProject(id: $id, type: $type, itemId: $itemId) {
+    _id
+    userName {
+      _id
+      name
+      email
+    }
+    palettes {
+      _id
+      userId
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      userId
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      fontName
+      userId
+      activeFontFamily
+    }
+    projectName
+  }
+}
+`
 
 export const ADD_Project =gql`
 mutation CreateProject($userName: ID!, $projectName: String!) {

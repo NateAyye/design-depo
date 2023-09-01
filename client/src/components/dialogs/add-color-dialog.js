@@ -7,10 +7,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { useAppContext } from "../../context/AppState";
-import { ADD_COLOR, SET_MODAL_OPEN, SET_TAB } from "../../context/AppState/actions";
+import { ADD_COLOR, SET_MODAL_OPEN, SET_TAB, UPDATE_COLOR as UPDATE_COLOR_STATE } from "../../context/AppState/actions";
 import authService from "../../lib/auth";
-import { getColorName } from "../../lib/colors";
-import { CREATE_COLOR } from "../../lib/mutations";
+import { getColorName, hexToRgb } from "../../lib/colors";
+import { CREATE_COLOR, UPDATE_COLOR } from "../../lib/mutations";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -23,11 +23,15 @@ const formSchema = z.object({
   color: z.string()
 })
 
-function AddColorDialog({ toastAction = false, triggerElement, hex, rgb, name, setName, setHex, setRgb  }) {
+function AddColorDialog({ toastAction = false, triggerElement, color, editing = false }) {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [error, setError] = useState(null);
+  const [rgb, setRgb] = useState(hexToRgb(color.hexCode || '#000000'));
+  const [hex, setHex] = useState(color.hexCode || '#000000');
+  const [name, setName] = useState(color.name || 'Black');
   const [open, setOpen] = useState(false);
   const [createColor] = useMutation(CREATE_COLOR);
+  const [updateColor] = useMutation(UPDATE_COLOR)
   const navigate = useNavigate();
   const [, appDispatch] = useAppContext()
   const { toast } = useToast();
@@ -47,9 +51,13 @@ function AddColorDialog({ toastAction = false, triggerElement, hex, rgb, name, s
   async function onFormSubmit(values) {
     try {
       // TODO: Add color to database
-      const mutationResponse = await createColor({ variables: { hexCode: values.color, name: values.name, userId: authService.getProfile().data._id } })
-      const color = mutationResponse.data;
-      appDispatch({ type: ADD_COLOR, payload: color.createColor })
+      const mutationResponse = editing ? await updateColor({ variables: { id: color._id, hexCode: values.color, name: values.name, userId: authService.getProfile().data._id } }) : await createColor({ variables: { hexCode: values.color, name: values.name, userId: authService.getProfile().data._id } })
+      const colorRes = mutationResponse.data;
+      if (editing) {
+        appDispatch({ type: UPDATE_COLOR_STATE, payload: colorRes.updateColor })
+      } else {
+        appDispatch({ type: ADD_COLOR, payload: colorRes.createColor })
+      }
       toast({
         title: `Success: ${ values.name }`,
         description: 'Color saved successfully.',

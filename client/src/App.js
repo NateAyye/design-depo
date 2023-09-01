@@ -14,8 +14,10 @@ import { ColorPickerProvider } from './context/ColorPicker';
 import Auth from './pages/Auth';
 import ColorPicker from './pages/ColorPicker';
 import Dashboard from './pages/Dashboard';
+import GradientGenerator from './pages/GradientGenerator';
 import Home from './pages/Home';
 import PaletteGenerator from './pages/PaletteGenerator';
+import ProfilePage from './pages/ProfilePage';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -54,6 +56,10 @@ function App() {
                   element={<Auth />}
                 />
                 <Route
+                  path="/profile"
+                  element={<ProfilePage />}
+                />
+                <Route
                   path="/dashboard"
                   element={<Dashboard />}
                 />
@@ -68,6 +74,10 @@ function App() {
                 <Route
                   path="/palette-generator"
                   element={<PaletteGenerator />}
+                />
+                <Route
+                  path="/gradient-generator"
+                  element={<GradientGenerator />}
                 />
               </Routes>
             </main>

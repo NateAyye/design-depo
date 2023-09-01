@@ -9,13 +9,9 @@ export const reducer = (state, action) => {
         logged_in: action.payload
       };
     case ADD_COLOR:
-      const newColor = {
-        id: state.colors[state.colors?.length - 1]?.id + 1 || 1,
-        ...action.payload
-      };
       return {
         ...state,
-        colors: [...state.colors, newColor]
+        colors: [...state.colors, action.payload]
       };
     case REMOVE_COLOR:
       return {
@@ -59,7 +55,6 @@ export const reducer = (state, action) => {
 
     case ADD_GRADIENT:
       const newGradient = {
-        id: state.gradients[state.gradients?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -69,12 +64,12 @@ export const reducer = (state, action) => {
     case REMOVE_GRADIENT:
       return {
         ...state,
-        gradients: state.gradients.filter(g => g.id !== action.payload)
+        gradients: state.gradients.filter(g => g._id !== action.payload)
       };
     case UPDATE_GRADIENT:
       return {
         ...state,
-        gradients: state.gradients.map(g => g.id === action.payload.id ? action.payload : g)
+        gradients: state.gradients.map(g => g._id === action.payload._id ? action.payload : g)
       };
     case SET_GRADIENTS:
       return {
@@ -84,7 +79,6 @@ export const reducer = (state, action) => {
 
     case ADD_FONT:
       const newFont = {
-        id: state.fonts[state.fonts?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -94,12 +88,12 @@ export const reducer = (state, action) => {
     case REMOVE_FONT:
       return {
         ...state,
-        fonts: state.fonts.filter(f => f.id !== action.payload)
+        fonts: state.fonts.filter(f => f._id !== action.payload)
       };
     case UPDATE_FONT:
       return {
         ...state,
-        fonts: state.fonts.map(f => f.id === action.payload.id ? action.payload : f)
+        fonts: state.fonts.map(f => f._id === action.payload._id ? action.payload : f)
       };
     case SET_FONTS:
       return {
@@ -109,7 +103,6 @@ export const reducer = (state, action) => {
 
     case ADD_PROJECT:
       const newProject = {
-        id: state.projects[state.projects?.length - 1]?.id + 1 || 1,
         ...action.payload
       };
       return {
@@ -119,12 +112,12 @@ export const reducer = (state, action) => {
     case REMOVE_PROJECT:
       return {
         ...state,
-        projects: state.projects.filter(p => p.id !== action.payload)
+        projects: state.projects.filter(p => p._id !== action.payload)
       };
     case UPDATE_PROJECT:
       return {
         ...state,
-        projects: state.projects.map(p => p.id === action.payload.id ? action.payload : p)
+        projects: state.projects.map(p => p._id === action.payload._id ? action.payload : p)
       };
     case SET_PROJECTS:
       return {

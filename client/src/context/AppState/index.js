@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect } from "react";
 import authService from "../../lib/auth";
 import { USER_LOGGED_IN } from "./actions";
 import { useAppReducer } from './reducers';
+import store from './store';
 
 const AppContext = createContext();
 const { Provider } = AppContext;
@@ -22,9 +23,12 @@ const AppProvider = ({ value = [], ...props }) => {
 
   useEffect(() => {
     dispatch({ type: USER_LOGGED_IN, payload: authService.loggedIn() })
+    if (authService.isTokenExpired(authService.getToken())) {
+      authService.logout()
+    }
   }, [dispatch])
 
-  return <Provider value={[state, dispatch]} {...props} />;
+  return <Provider store={store} value={[state, dispatch]} {...props} />;
 };
 
 const useAppContext = () => {
