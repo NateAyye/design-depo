@@ -183,6 +183,53 @@ export const UPDATE_GRADIENT = gql`
     }
 `;
 
+export const REMOVE_ITEM_FROM_PROJECT = gql`
+mutation RemoveItemFromProject($id: ID!, $itemId: ID!, $type: String!) {
+  removeItemFromProject(id: $id, itemId: $itemId, type: $type) {
+    _id
+    userName {
+      _id
+      name
+      email
+    }
+    projectName
+    palettes {
+      _id
+      userId
+      paletteName
+      createdAt
+      color1
+      color2
+      color3
+      color4
+      color5
+      colors
+    }
+    gradients {
+      _id
+      userId
+      gradientName
+      color
+      createdAt
+    }
+    colors {
+      _id
+      createdAt
+      hexCode
+      name
+      userId
+      references
+    }
+    fonts {
+      _id
+      fontName
+      userId
+      activeFontFamily
+    }
+  }
+}
+`
+
 export const ADD_ITEM_TO_PROJECT = gql`
 mutation AddItemToProject($id: ID!, $type: String!, $itemId: ID!) {
   addItemToProject(id: $id, type: $type, itemId: $itemId) {
@@ -230,7 +277,7 @@ mutation AddItemToProject($id: ID!, $type: String!, $itemId: ID!) {
 }
 `
 
-export const ADD_Project =gql`
+export const ADD_Project = gql`
 mutation CreateProject($userName: ID!, $projectName: String!) {
   createProject(userName: $userName, projectName: $projectName) {
     _id
@@ -273,7 +320,7 @@ mutation CreateProject($userName: ID!, $projectName: String!) {
   }
 }`;
 
-export const DELETE_PROJECT=gql`
+export const DELETE_PROJECT = gql`
 mutation DeleteProject($deleteProjectId: ID!) {
   deleteProject(id: $deleteProjectId) {
     _id
@@ -316,7 +363,7 @@ mutation DeleteProject($deleteProjectId: ID!) {
   }
 }`;
 
-export const UPDATE_PROJECT=gql`
+export const UPDATE_PROJECT = gql`
 mutation UpdateProjectName($updateProjectNameId: ID!, $newProjectName: String!) {
   updateProjectName(id: $updateProjectNameId, newProjectName: $newProjectName) {
     _id
