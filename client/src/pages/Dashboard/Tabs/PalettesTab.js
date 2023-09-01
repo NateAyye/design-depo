@@ -26,6 +26,7 @@ function PalettesTab() {
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_PALETTES);
   const [deletePalette] = useMutation(DELETE_PALETTE);
   const navigate = useNavigate()
+  const [projectModalOpen, setProjectModalOpen] = useState(false)
   const [open, setOpen] = useState(false);
   const [currentPalette, setCurrentPalette] = useState(null)
   const { toast } = useToast()
@@ -82,7 +83,14 @@ function PalettesTab() {
             menuContent={
               <>
                 <DropdownMenuItem asChild>
-                  <AddToProjectDialog item={palette} type={'palettes'} />
+                  <Button onClick={() => {
+                    setCurrentPalette(palette)
+                    setProjectModalOpen(true)
+                  }} className='w-full justify-start' variant='ghost'>
+                    Add To Project
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
@@ -131,6 +139,7 @@ function PalettesTab() {
           </ItemContainer>
         ))}
       </ItemGrid>
+      <AddToProjectDialog item={currentPalette} open={projectModalOpen} setOpen={setProjectModalOpen} type={'palettes'} />
     </div>
   )
 }

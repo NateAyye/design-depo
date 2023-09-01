@@ -26,6 +26,7 @@ function ColorsTab() {
   const [name, setName] = useState("Black");
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_COLORS);
   const [deleteColor] = useMutation(DELETE_COLOR);
+  const [projectModalOpen, setProjectModalOpen] = useState(false)
   const dialogProps = { hex, setHex, rgb, setRgb, name, setName }
   const { toast } = useToast()
   const { CopyAndAlert } = useCopy()
@@ -94,7 +95,12 @@ function ColorsTab() {
                 menuContent={
                   <>
                     <DropdownMenuItem asChild>
-                      <AddToProjectDialog item={color} type={'colors'} />
+                      <Button className="w-full justify-start" variant='ghost' onClick={() => {
+                        setSelectedColor(color)
+                        setProjectModalOpen(true)
+                      }}>
+                        Add to Project
+                      </Button>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
@@ -147,6 +153,7 @@ function ColorsTab() {
             )
           })}
       </ItemGrid>
+      <AddToProjectDialog item={selectedColor} type={'colors'} open={projectModalOpen} setOpen={setProjectModalOpen} />
     </div>
   )
 }

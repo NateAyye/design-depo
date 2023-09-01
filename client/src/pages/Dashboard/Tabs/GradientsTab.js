@@ -23,6 +23,7 @@ function GradientsTab() {
   const [appState, appDispatch] = useAppContext()
   const [color, setColor] = useState('rgba(255, 255, 255, 1)')
   const { loading, error, data, refetch } = useQuery(QUERY_ALL_GRADIENTS);
+  const [projectModalOpen, setProjectModalOpen] = useState(false)
   const [deleteGradient] = useMutation(DELETE_GRADIENT);
   const [modalOpen, setModalOpen] = useState(false)
   const [name, setName] = useState("Black");
@@ -90,7 +91,12 @@ function GradientsTab() {
             menuContent={
               <>
                 <DropdownMenuItem asChild>
-                  <AddToProjectDialog item={gradient} type={'gradients'} />
+                  <Button onClick={() => {
+                    setCurrentGradient(gradient)
+                    setProjectModalOpen(true)
+                  }} className='w-full justify-start' variant='ghost'>
+                    Add To Project
+                  </Button>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
@@ -137,6 +143,7 @@ function GradientsTab() {
           </ItemContainer>
         ))}
       </ItemGrid>
+      <AddToProjectDialog item={currentGradient} open={projectModalOpen} setOpen={setProjectModalOpen} type={'gradients'} />
     </div>
   )
 }
