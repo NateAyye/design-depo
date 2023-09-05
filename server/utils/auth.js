@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const secret = 'mysecretgnbsncproject3';
-const expiration = '15m';
+const expiration = '250m';
 
 module.exports = {
   signToken: function ({ email, name, _id }) {
