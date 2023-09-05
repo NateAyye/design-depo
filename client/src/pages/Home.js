@@ -68,7 +68,7 @@ export default function Home() {
           <img
             src={images}
             alt="gif of color wheel"
-            className="h-[280px] w-[280px] object-cover absolute -top-16 right-1/2 translate-x-1/2 "
+            className="h-[140px] w-[140px] md:h-[280px] md:w-[280px] object-cover absolute -top-16 right-1/2 translate-x-1/2 "
           />
         </div>
 
