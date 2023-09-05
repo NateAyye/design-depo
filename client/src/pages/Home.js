@@ -26,7 +26,7 @@ export default function Home() {
         <div className="flex justify-between container relative">
           <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
             <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-              <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+              <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-muted-foreground ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                 Start designing your vision today with Design Depo{' '}
                 {/*<a href="#" className="font-semibold text-indigo-600">
                 <span className="absolute inset-0" aria-hidden="true" />
@@ -35,10 +35,10 @@ export default function Home() {
               </div>
             </div>
             <div className="text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
                 Generate custom color stories at the click of button
               </h1>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
+              <p className="mt-6 text-lg leading-8 text-muted-foreground">
                 Our app offers an extensive repository of hex codes, ensuring
                 that you'll never run out of unique colors and gradients to
                 elevate your projects. With our user-friendly interface, you can
@@ -56,7 +56,7 @@ export default function Home() {
                     <Link to="/auth?tab=login">Login</Link>
                   </Button>
                 </div>
-                <div className="text-sm font-semibold leading-6 text-gray-900">
+                <div className="text-sm font-semibold leading-6 text-foreground">
                   <Button variant="primary" asChild>
                     <Link to="/auth?tab=sign-up">Sign Up</Link>
                   </Button>
@@ -86,10 +86,10 @@ export default function Home() {
         </div>
         <GridDisplay>
           <div className="flex flex-col items-center justify-center p-5 sm:p-8">
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
               Color Picker
             </h2>
-            <p className="mt-4 text-lg leading-6 text-gray-600">
+            <p className="mt-4 text-lg leading-6 text-muted-foreground">
               Our color picker allows you to generate hex codes for any color
               you can imagine. You can also save your favorite colors to your
               personal library for easy access.
@@ -120,10 +120,10 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-col items-center justify-center p-5 sm:p-8">
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
               Gradient Generator
             </h2>
-            <p className="mt-4 text-lg leading-6 text-gray-600">
+            <p className="mt-4 text-lg leading-6 text-muted-foreground">
               Our gradient picker allows you to generate hex codes for any
               gradient you can imagine. You can also save your favorite
               gradients to your personal library for easy access.
@@ -142,10 +142,10 @@ export default function Home() {
         </GridDisplay>
         <GridDisplay>
           <div className="flex flex-col items-center justify-center p-5 sm:p-8">
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
               Palette Picker
             </h2>
-            <p className="mt-4 text-lg leading-6 text-gray-600">
+            <p className="mt-4 text-lg leading-6 text-muted-foreground">
               Our palette picker allows you to generate hex codes for any
               palette you can imagine. You can also save your favorite palettes
               to your personal library for easy access.
