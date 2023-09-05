@@ -1,54 +1,91 @@
-import { CopyIcon, HeartIcon, Share1Icon, UpdateIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
-import { createSearchParams, useSearchParams } from "react-router-dom";
-import AddColorDialog from "../components/dialogs/add-color-dialog";
-import AddPaletteDialog from "../components/dialogs/add-palette-dialog";
-import ItemContainer from "../components/item-container";
-import { Button } from "../components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
-import { useCopy } from "../hooks/useCopy";
-import { formatPalette, generateRandomColor, generateRandomPalette, getTextColor } from "../lib/colors";
+import {
+  CopyIcon,
+  HeartIcon,
+  Share1Icon,
+  UpdateIcon,
+} from '@radix-ui/react-icons';
+import { useEffect, useState } from 'react';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
+import AddColorDialog from '../components/dialogs/add-color-dialog';
+import AddPaletteDialog from '../components/dialogs/add-palette-dialog';
+import ItemContainer from '../components/item-container';
+import { Button } from '../components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../components/ui/tooltip';
+import { useCopy } from '../hooks/useCopy';
+import {
+  formatPalette,
+  generateRandomColor,
+  generateRandomPalette,
+  getTextColor,
+} from '../lib/colors';
 
 function PaletteGenerator() {
   const [searchParams] = useSearchParams();
   const randomPalette = generateRandomPalette(generateRandomColor());
   const palette = formatPalette(searchParams.get('palette')) || randomPalette;
   const [paletteState, setPaletteState] = useState(palette);
-  const [openModal, setOpenModal] = useState(false)
-  const { CopyAndAlert } = useCopy()
-  const [currentColor, setCurrentColor] = useState(paletteState[0])
+  const [openModal, setOpenModal] = useState(false);
+  const [paletteModalOpen, setPaletteModalOpen] = useState(false);
+  const { CopyAndAlert } = useCopy();
+  const [currentColor, setCurrentColor] = useState(paletteState[0]);
 
   useEffect(() => {
     function onKeyDown(e) {
       if (e.ctrlKey && e.key === ' ') {
-        setPaletteState(generateRandomPalette(generateRandomColor()))
+        setPaletteState(generateRandomPalette(generateRandomColor()));
       }
     }
-    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [])
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
 
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex flex-col mx-5 sm:items-center mb-5 gap-2">
-        <h2 className="text-5xl self-start font-bold font-segoe ">Palette Generator</h2>
-        <small className="text-foreground/80 self-start">ShortCut: (press <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">CTRL</kbd> + <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">Spacebar</kbd> to generate a random palette)</small>
+        <h2 className="text-5xl self-start font-bold font-segoe ">
+          Palette Generator
+        </h2>
+        <small className="text-foreground/80 self-start">
+          ShortCut: (press{' '}
+          <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">
+            CTRL
+          </kbd>{' '}
+          +{' '}
+          <kbd className="bg-muted p-0.5 shadow-sm border-r-2 border-b-2 rounded-sm">
+            Spacebar
+          </kbd>{' '}
+          to generate a random palette)
+        </small>
         <section className="container px-10 my-5 flex justify-end items-center ">
-          <div className="flex flex-row-reverse p-1 gap-3 border rounded-sm flex-1" >
+          <div className="flex flex-row-reverse p-1 gap-3 border rounded-sm flex-1">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={(e) => {
-                    e.stopPropagation()
-                    const path = '/palette-generator'
-                    const serarchParams = createSearchParams({
-                      palette: paletteState.map((color) => color.replace('#', '')).join('-'),
-                    }).toString()
-                    const url = window.location.origin + path + '?' + serarchParams
-                    CopyAndAlert({ content: url, title: `Copied ${ url } to clipboard` })
-                  }} variant='ghost'>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const path = '/palette-generator';
+                      const serarchParams = createSearchParams({
+                        palette: paletteState
+                          .map((color) => color.replace('#', ''))
+                          .join('-'),
+                      }).toString();
+                      const url =
+                        window.location.origin + path + '?' + serarchParams;
+                      CopyAndAlert({
+                        content: url,
+                        title: `Copied ${url} to clipboard`,
+                      });
+                    }}
+                    variant="ghost"
+                  >
                     <Share1Icon />
                   </Button>
                 </TooltipTrigger>
@@ -60,9 +97,14 @@ function PaletteGenerator() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button onClick={(e) => {
-                    setPaletteState(generateRandomPalette(generateRandomColor()))
-                  }} variant='ghost'>
+                  <Button
+                    onClick={(e) => {
+                      setPaletteState(
+                        generateRandomPalette(generateRandomColor())
+                      );
+                    }}
+                    variant="ghost"
+                  >
                     <UpdateIcon />
                   </Button>
                 </TooltipTrigger>
@@ -74,7 +116,12 @@ function PaletteGenerator() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <AddPaletteDialog toastAction palette={{ name: '', colors: paletteState }} />
+                  <AddPaletteDialog
+                    open={paletteModalOpen}
+                    setOpen={setPaletteModalOpen}
+                    toastAction
+                    palette={{ name: '', colors: paletteState }}
+                  />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Save Palette</p>
@@ -102,7 +149,11 @@ function PaletteGenerator() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="w-full flex justify-center">
-                      <Button className='h-9 w-9 p-0' onClick={() => CopyAndAlert({ content: color })} variant='ghost'>
+                      <Button
+                        className="h-9 w-9 p-0"
+                        onClick={() => CopyAndAlert({ content: color })}
+                        variant="ghost"
+                      >
                         <CopyIcon />
                       </Button>
                     </div>
@@ -117,16 +168,17 @@ function PaletteGenerator() {
                   <TooltipTrigger asChild>
                     <div className="w-full flex justify-center">
                       <Button
-                        variant='ghost'
-                        className='h-9 w-9 p-0'
+                        variant="ghost"
+                        className="h-9 w-9 p-0"
                         onClick={(e) => {
-                          e.preventDefault()
-                          setPaletteState(prev => {
-                            const newPalette = [...prev]
-                            newPalette[paletteState.findIndex(c => c === color)] = generateRandomColor()
-                            return newPalette
-                          })
-
+                          e.preventDefault();
+                          setPaletteState((prev) => {
+                            const newPalette = [...prev];
+                            newPalette[
+                              paletteState.findIndex((c) => c === color)
+                            ] = generateRandomColor();
+                            return newPalette;
+                          });
                         }}
                       >
                         <UpdateIcon />
@@ -142,10 +194,14 @@ function PaletteGenerator() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="w-full flex justify-center">
-                      <Button onClick={() => {
-                        setCurrentColor(color)
-                        setOpenModal(true)
-                      }} className='h-9 w-9 p-0' variant="ghost">
+                      <Button
+                        onClick={() => {
+                          setCurrentColor(color);
+                          setOpenModal(true);
+                        }}
+                        className="h-9 w-9 p-0"
+                        variant="ghost"
+                      >
                         <HeartIcon />
                       </Button>
                     </div>
@@ -167,7 +223,7 @@ function PaletteGenerator() {
         defaults={{ name: '', color: currentColor }}
       />
     </div>
-  )
+  );
 }
 
-export default PaletteGenerator
+export default PaletteGenerator;
