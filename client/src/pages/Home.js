@@ -10,8 +10,8 @@ export default function Home() {
   
 
   return (
-    <div className="bg-white">
-
+    <div className="bg-white flex">
+     
 
       <div className="relative isolate px-6 pt-14 lg:px-8 ">
         <div
@@ -68,20 +68,11 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block absolute top-0 right-0 w-1/2 h-1/2">
-          <div className="h-screen w-1/2 bg-transparent top-0 right-0"></div>
-            <img
-              src={images}
-              alt="gif of color wheel"
-              className="h-480 w-480 object-cover absolute top-0 right-0"
-            />
+        
 
-           
-
-          </div> 
           
-         </div> 
-
+         
+        </div>
         <div
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"
@@ -97,6 +88,18 @@ export default function Home() {
         <div className="h-screen w-1/2 bg-transparent"></div>
 
       </div>
+      <div className="hidden lg:block bg-transparent w-1/2 h-screen">
+          <div className="h-screen w-1/2 right-0 bg-transparent"></div>
+            <img
+              src={images}
+              alt="gif of color wheel"
+              className="h-480 w-480 object-cover absolute top-12 right-0 bg-transparent"
+            />
+
+           
+
+          </div> 
+      
     </div>
   )
 };
