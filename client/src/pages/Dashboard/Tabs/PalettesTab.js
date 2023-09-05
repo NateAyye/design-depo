@@ -122,11 +122,11 @@ function PalettesTab() {
                       Add To Project
                     </Button>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild></DropdownMenuItem>
 
                   <DropdownMenuItem asChild>
                     <ExportDialog palette={palette} />
                   </DropdownMenuItem>
+
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();
