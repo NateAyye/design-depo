@@ -85,7 +85,7 @@ function FontsTab({ style }) {
               </style>
               <ItemContainer
                 key={font._id}
-                containerClass={'bg-foreground text-background'}
+                containerClass={'bg-foreground text-background text-2xl'}
                 containerStyle={{ fontFamily: font.activeFontFamily }}
                 onRemove={async (e) => {
                   e.stopPropagation();
