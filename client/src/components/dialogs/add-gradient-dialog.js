@@ -23,10 +23,9 @@ const formSchema = z.object({
   color: z.string()
 })
 
-function AddGradientDialog({ triggerElement, toastAction = false, editing, gradient }) {
+function AddGradientDialog({ triggerElement, toastAction = false, editing, gradient, open, setOpen }) {
   const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState(gradient?.gradientName || '')
+  const [name, setName] = useState(gradient?.name || gradient?.gradientName || '')
   const [color, setColor] = useState(gradient?.color || 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
   const [, appDispatch] = useAppContext()
   const [createGradient] = useMutation(CREATE_GRADIENT);
@@ -48,7 +47,8 @@ function AddGradientDialog({ triggerElement, toastAction = false, editing, gradi
   })
 
   useEffect(() => {
-    setGradient(gradient?.color ?? 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
+    setGradient(gradient?.color || 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(0, 0, 0) 100%)')
+    setName(gradient?.name ?? gradient?.gradientName ?? '')
   }, [gradient]) // eslint-disable-line 
   // ^^^^ Leave Empty to run once on mount
   // TODO: Fix this warning

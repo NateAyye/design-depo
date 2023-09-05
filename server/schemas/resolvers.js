@@ -35,7 +35,6 @@ const resolvers = {
     Project: async (_, { id }) => await Project.findById(id),
 
     GetUserItems: async (_, { userId }) => {
-      console.log(userId);
       const projects = await Project.find({ userName: userId });
       const palettes = await Palettes.find({ userId: userId });
       const gradients = await Gradients.find({ userId: userId });

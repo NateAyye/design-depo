@@ -2,9 +2,31 @@
 
 ## Description
 
+[Live Site Here](https://design-depo-50c7f040c26d.herokuapp.com/)
+
 Design Depo. You ever making a (website, graphic, etc..) and you just can't find the right color scheme? Or maybe you're looking for a font that just doesn't exist? Well, look no further! Design Depo is a website that allows you to generate colors and pick fonts to use in your next project. You can also save your favorite colors and fonts to your dashboard for easy access later. Never again will you have to search for that perfect color, font, gradient and More!! NO Pay wall, NO subscription, NO BS. Just a simple, easy to use website that will help you get your project done faster.
 
 ## Table of Contents
+
+- [Design Depo](#design-depo)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Usage](#usage)
+  - [Login](#login)
+  - [How To Save](#how-to-save)
+  - [Future Development](#future-development)
+  - [Available Scripts](#available-scripts)
+    - [`npm start`](#npm-start)
+    - [`npm run build`](#npm-run-build)
+    - [`npm run develop`](#npm-run-develop)
+    - [`npm run seed`](#npm-run-seed)
+    - [`npm run client`](#npm-run-client)
+    - [`npm run server`](#npm-run-server)
+  - [Learn More](#learn-more)
+  - [Contribution](#contribution)
+  - [Tests](#tests)
+  - [License](#license)
+  - [Find Me](#find-me)
 
 ## Usage
 
@@ -23,7 +45,6 @@ You are going to want to login if you want to save anything and refrence it late
 To Save a item, simply click the ":heart:" button on the item you want to save. To view your saved colors and fonts, click the "Dashboard" button in the top right corner in the user menu. To delete a item from your dashboard, click the "Delete" button on the item you want to delete.
 
 ![Screenshot](https://github.com/NateAyye/design-depo/blob/main/client/src/assets/images/screenshot3.png?raw=true)
-
 
 ## Future Development
 

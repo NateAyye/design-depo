@@ -7,13 +7,12 @@ import authService from "../../lib/auth";
 import { ADD_ITEM_TO_PROJECT, ADD_Project } from "../../lib/mutations";
 import { QUERY_USERS_ITEMS } from "../../lib/queries";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import { useToast } from "../ui/use-toast";
 
-function AddToProjectDialog({ item, type }) {
-  const [open, setOpen] = useState(false);
+function AddToProjectDialog({ item, type, open, setOpen }) {
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectDialog, setNewProjectDialog] = useState(false);
   const [appState, appDispatch] = useAppContext()
@@ -35,11 +34,6 @@ function AddToProjectDialog({ item, type }) {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button className='w-full justify-start px-2' variant='ghost'>
-            Add To Project
-          </Button>
-        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add To Project</DialogTitle>

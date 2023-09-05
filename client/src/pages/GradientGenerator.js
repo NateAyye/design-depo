@@ -97,7 +97,7 @@ function GradientGenerator() {
         containerClass={'flex shadow-none flex-col items-center container sm:flex-row-reverse  h-full'}
       >
         <div className="p-0 sm:p-4">
-          <GradientPicker hideColorTypeBtns hidePresets height={250} width={350} value={gradientState} onChange={setGradientState} />
+          <GradientPicker hideColorTypeBtns hidePresets height={250} width={300} value={gradientState} onChange={setGradientState} />
         </div>
         <div
           key={gradient}
