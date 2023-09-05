@@ -1,4 +1,4 @@
-import { CopyIcon, Share1Icon, UpdateIcon } from "@radix-ui/react-icons";
+import { CopyIcon, HeartIcon, Share1Icon, UpdateIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import AddColorDialog from "../components/dialogs/add-color-dialog";
@@ -14,7 +14,9 @@ function PaletteGenerator() {
   const randomPalette = generateRandomPalette(generateRandomColor());
   const palette = formatPalette(searchParams.get('palette')) || randomPalette;
   const [paletteState, setPaletteState] = useState(palette);
+  const [openModal, setOpenModal] = useState(false)
   const { CopyAndAlert } = useCopy()
+  const [currentColor, setCurrentColor] = useState(paletteState[0])
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -140,11 +142,12 @@ function PaletteGenerator() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="w-full flex justify-center">
-                      <AddColorDialog
-                        toastAction
-                        color={{ hexCode: color, name: '' }}
-                        defaults={{ name: '', color: color }}
-                      />
+                      <Button onClick={() => {
+                        setCurrentColor(color)
+                        setOpenModal(true)
+                      }} className='h-9 w-9 p-0' variant="ghost">
+                        <HeartIcon />
+                      </Button>
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -156,6 +159,13 @@ function PaletteGenerator() {
           </div>
         ))}
       </ItemContainer>
+      <AddColorDialog
+        toastAction
+        open={openModal}
+        setOpen={setOpenModal}
+        color={{ hexCode: currentColor, name: '' }}
+        defaults={{ name: '', color: currentColor }}
+      />
     </div>
   )
 }

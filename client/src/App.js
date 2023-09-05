@@ -80,6 +80,7 @@ function App() {
                   element={<GradientGenerator />}
                 />
               </Routes>
+
             </main>
             <Footer />
           </div>
