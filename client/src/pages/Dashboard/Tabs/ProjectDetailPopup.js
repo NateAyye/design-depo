@@ -51,12 +51,15 @@ function ProjectDetailPopup({ project, onClose }) {
 
   return (
     <div>
-      <div className="header_container" style={{ height: '200px' }}>
+      <div className="header_container">
         <h1 className="content_h1">
           The Content of Project: {project.projectName}
         </h1>
-        <nav>
-          <ItemGrid>
+        <Button onClick={onClose} className="content_Button" id="goBack">
+           Go Back to projects list
+        </Button>
+        <nav id='navBar'>
+          <ItemGrid >
             <Button
               onClick={() => setActiveGrid('palettes')}
               style={isButtonActive('palettes') ? activeButtonStyle : {}}
@@ -84,12 +87,13 @@ function ProjectDetailPopup({ project, onClose }) {
             >
               Gradients
             </Button>
+            
           </ItemGrid>
+          
         </nav>
       </div>
 
       <div>
-        <hr></hr>
         <div className="content_body">
           {activeGrid === 'palettes' && (
             <div id="pallets_container">
@@ -409,7 +413,7 @@ function ProjectDetailPopup({ project, onClose }) {
                     </div>
                   ))
                 ) : (
-                  <p>No Pallets are assigned to this project.</p>
+                  <p>No Fonts are assigned to this project.</p>
                 )}
               </ItemGrid>
             </div>
@@ -521,25 +525,16 @@ function ProjectDetailPopup({ project, onClose }) {
                     </div>
                   ))
                 ) : (
-                  <p>No Pallets are assigned to this project.</p>
+                  <p>No gradients are assigned to this project.</p>
                 )}
               </ItemGrid>
             </div>
           )}
         </div>
-        <hr></hr>
-        <Button onClick={onClose} className="content_Button">
-          Go Back to projects list
-        </Button>
+        
       </div>
     </div>
   );
 }
 
 export default ProjectDetailPopup;
-
-/*
-0
-: 
-{__typename: 'Font', _id: '64f221e6bb2a0a9dceecc810', activeFontFamily: 'Abril Fatface'}
-*/

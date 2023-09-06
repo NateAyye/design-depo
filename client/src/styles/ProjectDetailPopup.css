@@ -3,6 +3,7 @@
     padding: 0;
     background-color: aqua;
     text-align: center;
+    height: 40vh;
 }
 .content_h1{
     font-weight: bold;
@@ -22,4 +23,9 @@
 .nav_button {
     padding-left: 1%;
 }
+
+#goBack{
+    background-color: rgb(243, 0, 0);
+}
+
 
