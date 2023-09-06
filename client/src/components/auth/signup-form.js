@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as z from 'zod';
 import Auth from '../../lib/auth';
-import {  CREATE_USER } from '../../lib/mutations';
+import { CREATE_USER } from '../../lib/mutations';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -45,7 +45,7 @@ const SignUpForm = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data)
+    console.log(data);
     try {
       // const res = await api.post('/signup', data);
       const mutationResponse = await createUser({
@@ -58,7 +58,7 @@ const SignUpForm = () => {
       console.log(mutationResponse.data);
       const token = mutationResponse.data.createUser.token;
       Auth.login(token);
-      navigate('/')
+      navigate(-1);
     } catch (error) {
       console.log(error);
       setError(error?.response?.data?.message || 'Something went wrong.');
