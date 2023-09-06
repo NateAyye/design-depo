@@ -190,6 +190,8 @@ function GradientGenerator() {
                 <TooltipTrigger asChild>
                   <AddGradientDialog
                     toastAction
+                    open={openModal}
+                    setOpen={setOpenModal}
                     gradient={{ gradientName: '', color: gradientState }}
                     triggerElement={() => {
                       return (
