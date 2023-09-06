@@ -24,6 +24,7 @@ Design Depo. You ever making a (website, graphic, etc..) and you just can't find
     - [`npm run server`](#npm-run-server)
   - [Learn More](#learn-more)
   - [Contribution](#contribution)
+  - [Maintainers](#maintainers)
   - [Tests](#tests)
   - [License](#license)
   - [Find Me](#find-me)
@@ -113,6 +114,12 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 5. Submit a pull request :D
 
 Basic Rules for contributing to this repo are gonna be held to standards with the [Contributor Convenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) Standards.
+
+## Maintainers
+
+[<img style='border-radius: 100%;' src="https://github.com/beasaddress.png" width="60px;"/><br /><sub><a href="https://github.com/beasaddress">beasaddress</a></sub>](https://github.com/beasaddress)
+
+[<img style='border-radius: 100%;' src="https://github.com/ghiasnaser.png" width="60px;"/><br /><sub><a href="https://github.com/ghiasnaser">ghiasnaser</a></sub>](https://github.com/ghiasnaser)
 
 ## Tests
 
